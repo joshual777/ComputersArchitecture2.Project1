@@ -1,7 +1,7 @@
 """
 								MAIN MEMORY MODEL
 
-                             SHARED 8 SPACES MAIN MEMORY MODEL
+                         SHARED 8 SPACES MAIN MEMORY MODEL
 
         -It has eight different spaces: 000, 001, 010, 011, 100, 101, 110, 111
         -It is connected to the CPUs by a main bus 
