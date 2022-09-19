@@ -1,8 +1,10 @@
 """
 								CACHE MEMORY MODEL AND SYSTEM COHERENCE
 
+										CACHE MEMORY INFORMATION
+
 		Following the project design specification, each block requires specific information
-		they can store 4 memoty blocks and de the information is:
+		they can store 4 memory blocks and de the information is:
 
 			-->  Number of bock
 			-->  Coherence state by the project: M = modified, S = shared, I= invalid, E = exclusive
@@ -20,37 +22,37 @@ class L1_Info:
 		self.data = 0				#Hexadecimal data in the process
 
 
-#This function will get the number block and set the value of the block
-def getNumber(self):
-        	return self.Number
-def setNumber(self, Number):
-        	self.Number = Number
+	#This function will get the number block and set the value of the block
+	def getNumber(self):
+				return self.Number
+	def setNumber(self, Number):
+				self.Number = Number
 
 
-#This function will get the state block and set the state of the block according to the MESI protocol
-def getBitState(self):
-        	return self.bitState
+	#This function will get the state block and set the state of the block according to the MESI protocol
+	def getBitState(self):
+				return self.bitState
 
-def setBitState(self, state):
-        	self.bitState = state
-
-
-##This function will get the address block and set the address of the block
-def getAddress(self):
-        	return self.memoryAddress
-
-def setAddress(self, address):
-        	self.memoryAddress = address
+	def setBitState(self, state):
+				self.bitState = state
 
 
-#This function will get the hexadecimal data block and set the hexadecimal data of the block
-def getData(self):
-        	return self.data
+	##This function will get the address block and set the address of the block
+	def getAddress(self):
+				return self.memoryAddress
 
-def setData(self, data):
-        	self.data = data
+	def setAddress(self, address):
+				self.memoryAddress = address
 
 
-#Monitory function just in case, this will help to the GUI
-def printBlock(self):
-        	print("ID " + str(self.Number) + "  State " + str(self.bitState)+ "  Address " + str(self.memoryAddress) +"  Data " + str(self.data)  )
+	#This function will get the hexadecimal data block and set the hexadecimal data of the block
+	def getData(self):
+				return self.data
+
+	def setData(self, data):
+				self.data = data
+
+
+	#Monitory function just in case, this will help to the GUI
+	def printBlock(self):
+				print("ID " + str(self.Number) + "  State " + str(self.bitState)+ "  Address " + str(self.memoryAddress) +"  Data " + str(self.data)  )
