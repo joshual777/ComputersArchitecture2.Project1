@@ -4,8 +4,6 @@
         The main purpose is to generate the instruction by no using a random library 
         this will use Binomial function in order to achieve that
 """
-
-
 import time
 			
 def randomNum(n):
@@ -14,6 +12,7 @@ def randomNum(n):
 	p = int(t0[-2:])/100
 	i = 0
 	ex = 0
+    
 	while(i < n):
 		t = str(time.time())
 		t = t.replace('.','0')
