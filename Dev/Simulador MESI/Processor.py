@@ -22,50 +22,43 @@ class Processor:
 		self.lastInst  = ""                         #Chech the last executed instruction
 		self.control  = Controller(self.id, bus)    #Set the control 
 		
-	#Funtion to execute the selected instruction 
 	def exc(self):
-        #This will activate the clock associate to the processor
 		while self.running:
-		    self.thread_clock()
-            time.sleep(3)
+			self.thread_clock()
+			time.sleep(3)
 	
-    #Function to stop the clock associate to the processor
 	def exc_step(self):
 		self.thread_clock()
-	
-    #Fuction to manage the clock according to the selected instruction
+		
 	def thread_clock(self):
 		self.lastInst = self.instRunning
 		inst = InstructionGeneration.genInstruction()
+		self.instRunning = inst
 		print(str(self.id) + "=" + inst)
 		initial = inst[0]
-        #Read instruction
 		if initial == "R":
 			self.control.read(int(inst[5:8], 2))
-        #Write instruction
 		elif initial == "W":
 			self.control.write(int(inst[6:9], 2), int(inst[10:],16))
-        #Calc instruction
 		elif initial == "C":
 			print("CALC")
 		else:
-			print("ERROR: Generated Instruction")
+			print("ERROR: Instruction Generated")
 
-	#Activate the thread	
+		
 	def runThread(self, isStep):
 		if self.running:
 			print(str(self.id) + " Executing \n")
 		else: 
 			if isStep:
-				hilo = threading.Thread(target=self.exc_step)
+				hilo = threading.Thread(target=self.exc_step, daemon=True)
 			else:
 				self.running = True
-				hilo = threading.Thread(target=self.exc)
+				hilo = threading.Thread(target=self.exc, daemon=True)
 			hilo.start()
-
-    #Stop the thread		
+			
 	def stopThread(self):
 		if self.running:
 			self.running = False
 		else: 
-			print(str(self.id) + " STOP \n")	
+			print(str(self.id) + " Stopped \n")	
