@@ -39,10 +39,16 @@ class Processor:
 		self.instRunning = inst
 		print(str(self.id) + "=" + inst)
 		initial = inst[0]
+
+        #Read process instance instruction
 		if initial == "R":
 			self.control.read(int(inst[5:8], 2))
+        
+        #Write process instance instruction
 		elif initial == "W":
-			self.control.write(int(inst[6:9], 2), int(inst[10:],16))
+			self.control.write(int(inst[6:9], 2), int(inst[10:],16)) #Generate the hexadecimal code
+        
+        #Calc process instance instruction
 		elif initial == "C":
 			print("CALC")
 		else:
