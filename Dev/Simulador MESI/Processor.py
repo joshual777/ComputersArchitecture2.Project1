@@ -8,6 +8,7 @@
 import threading
 import InstructionGeneration
 import time
+from ControllerProtocol import Controller
 
 #This class models the processor and the modules it has 
 class Processor:
