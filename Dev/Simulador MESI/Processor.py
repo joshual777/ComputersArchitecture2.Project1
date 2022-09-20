@@ -21,15 +21,18 @@ class Processor:
 		self.instRunning  = "---"                   #Check the specific instruction
 		self.lastInst  = ""                         #Chech the last executed instruction
 		self.control  = Controller(self.id, bus)    #Set the control 
-		
+
+    #Function to execute the frequency in the whole system	
 	def exc(self):
 		while self.running:
 			self.thread_clock()
 			time.sleep(3)
 	
+    #Execute the process step by step
 	def exc_step(self):
 		self.thread_clock()
-		
+
+    #Function to manage the tiem in the clock	
 	def thread_clock(self):
 		self.lastInst = self.instRunning
 		inst = InstructionGeneration.genInstruction()
@@ -45,7 +48,8 @@ class Processor:
 		else:
 			print("ERROR: Instruction Generated")
 
-		
+
+    #Execute the threads in each processor	
 	def runThread(self, isStep):
 		if self.running:
 			print(str(self.id) + " Executing \n")
@@ -56,7 +60,8 @@ class Processor:
 				self.running = True
 				hilo = threading.Thread(target=self.exc, daemon=True)
 			hilo.start()
-			
+
+    #Stop the thread in the processors		
 	def stopThread(self):
 		if self.running:
 			self.running = False
