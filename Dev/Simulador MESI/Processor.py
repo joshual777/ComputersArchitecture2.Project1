@@ -6,6 +6,7 @@
             There will be three kind of instructions, read, write and calc (which consumes time).
 """
 import threading
+import InstructionGeneration
 import time
 
 #This class models the processor and the modules it has 
@@ -33,7 +34,7 @@ class Processor:
     #Fuction to manage the clock according to the selected instruction
 	def thread_clock(self):
 		self.lastInst = self.instRunning
-		inst = instGenerator.genInstruction()
+		inst = InstructionGeneration.genInstruction()
 		print(str(self.id) + "=" + inst)
 		initial = inst[0]
         #Read instruction
