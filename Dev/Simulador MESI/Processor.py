@@ -6,8 +6,8 @@
             There will be three kind of instructions, read, write and calc (which consumes time).
 """
 import threading
-import InstructionGeneration
 import time
+import InstructionGeneration
 from ControllerProtocol import Controller
 
 #This class models the processor and the modules it has 
@@ -26,7 +26,8 @@ class Processor:
 	def exc(self):
         #This will activate the clock associate to the processor
 		while self.running:
-			self.thread_clock()
+		    self.thread_clock()
+            time.sleep(3)
 	
     #Function to stop the clock associate to the processor
 	def exc_step(self):
