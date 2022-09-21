@@ -158,6 +158,24 @@ class Design:
         self.P3_BLOCK4_S= StringVar()
         self.P3_BLOCK4_S.set("----------")
 
+        #MEMORY CELLS
+        self.CELL0 = StringVar()
+        self.CELL0.set("----------")
+        self.CELL1 = StringVar()
+        self.CELL1.set("----------")
+        self.CELL2 = StringVar()
+        self.CELL2.set("----------")
+        self.CELL3 = StringVar()
+        self.CELL3.set("----------")
+        self.CELL4 = StringVar()
+        self.CELL4.set("----------")
+        self.CELL5 = StringVar()
+        self.CELL5.set("----------")
+        self.CELL6 = StringVar()
+        self.CELL6.set("----------")
+        self.CELL7 = StringVar()
+        self.CELL7.set("----------")
+
 
         self.Window_Design()
         self.Thread_Processors()
@@ -517,28 +535,28 @@ class Design:
 
 
             #Memmory Blocks
-            lbl_allocate0 = Label(window, text="000", bg = "#FFE373")
+            lbl_allocate0 = Label(window,  bg = "#FFE373",  textvariable=self.CELL0)
             lbl_allocate0.place(x=420, y=480)
 
-            lbl_allocate1 = Label(window, text="000" , bg = "#FFE373")
+            lbl_allocate1 = Label(window,  bg = "#FFE373",  textvariable=self.CELL1)
             lbl_allocate1.place(x=420, y=500)
 
-            lbl_allocate2 = Label(window, text="000", bg = "#FFE373")
+            lbl_allocate2 = Label(window,  bg = "#FFE373",  textvariable=self.CELL2)
             lbl_allocate2.place(x=420, y=520)
 
-            lbl_allocate3 = Label(window, text="000", bg = "#FFE373")
+            lbl_allocate3 = Label(window, bg = "#FFE373",  textvariable=self.CELL3)
             lbl_allocate3.place(x=420, y=540)
 
-            lbl_allocate4 = Label(window, text="000", bg = "#FFE373")
+            lbl_allocate4 = Label(window,  bg = "#FFE373",  textvariable=self.CELL4)
             lbl_allocate4.place(x=420, y=560)
 
-            lbl_allocate5 = Label(window, text="000", bg = "#FFE373")
+            lbl_allocate5 = Label(window,  bg = "#FFE373",  textvariable=self.CELL5)
             lbl_allocate5.place(x=420, y=580)
 
-            lbl_allocate6 = Label(window, text="000", bg = "#FFE373")
+            lbl_allocate6 = Label(window,  bg = "#FFE373",  textvariable=self.CELL6)
             lbl_allocate6.place(x=420, y=600)
 
-            lbl_allocate7 = Label(window, text="000", bg = "#FFE373")
+            lbl_allocate7 = Label(window,  bg = "#FFE373", textvariable=self.CELL7)
             lbl_allocate7.place(x=420, y=620)
 
     #Set all processor to the threading 
@@ -627,15 +645,15 @@ class Design:
         self.P3_BLOCK4_A.set(bin(self.processors[3].control.cache.getBlock(3).memoryAddress)[2:])
         
 
-        """
-        self.M0.set(hex(self.memory.read(0))[2:])
-        self.M1.set(hex(self.memory.read(1))[2:])
-        self.M2.set(hex(self.memory.read(2))[2:])
-        self.M3.set(hex(self.memory.read(3))[2:])
-        self.M4.set(hex(self.memory.read(4))[2:])
-        self.M5.set(hex(self.memory.read(5))[2:])
-        self.M6.set(hex(self.memory.read(6))[2:])
-        self.M7.set(hex(self.memory.read(7))[2:])
-        """
+
+        self.CELL0.set(hex(self.memory.read(0))[2:])
+        self.CELL1.set(hex(self.memory.read(1))[2:])
+        self.CELL2.set(hex(self.memory.read(2))[2:])
+        self.CELL3.set(hex(self.memory.read(3))[2:])
+        self.CELL4.set(hex(self.memory.read(4))[2:])
+        self.CELL5.set(hex(self.memory.read(5))[2:])
+        self.CELL6.set(hex(self.memory.read(6))[2:])
+        self.CELL7.set(hex(self.memory.read(7))[2:])
+ 
         time.sleep(0.1)
 
