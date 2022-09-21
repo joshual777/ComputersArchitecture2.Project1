@@ -561,6 +561,7 @@ class Design:
 
     #Set all processor to the threading 
     def Thread_Processors(self):
+
       bus_ = self.bus
       p0 = Processor(0, bus_)
       p1 = Processor(1, bus_)
@@ -572,7 +573,9 @@ class Design:
       UIThread = threading.Thread(target=self.updateUI, daemon=True)
       UIThread.start()
 
-    def updateUI(self):
+
+    def updateUI(self ):
+        
 
       while 1:
         #self.P0AInst.set(self.processors[0].instRunning)
@@ -643,8 +646,7 @@ class Design:
         self.P3_BLOCK2_A.set(bin(self.processors[3].control.cache.getBlock(1).memoryAddress)[2:])
         self.P3_BLOCK3_A.set(bin(self.processors[3].control.cache.getBlock(2).memoryAddress)[2:])
         self.P3_BLOCK4_A.set(bin(self.processors[3].control.cache.getBlock(3).memoryAddress)[2:])
-        
-
+      
 
         self.CELL0.set(hex(self.memory.read(0))[2:])
         self.CELL1.set(hex(self.memory.read(1))[2:])
