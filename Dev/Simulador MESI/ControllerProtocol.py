@@ -4,7 +4,6 @@ from SharedBus import MemoryBus
 from L1_Cache_Module import L1_Block
 
 class Controller:
-
         def  __init__(self, processorId, bus):
             self.cache  = L1_Block()
             self.memoryBus  = bus
@@ -27,7 +26,7 @@ class Controller:
                 elif address == 3 or address == 7:
                         block = self.cache.l1Blocks[3]
                 else:
-                    print("Direccion incorrecta")
+                    print("Wrong Address")
 
                 if block.memoryAddress == address and block.getBitState() != "I":
                     return block
@@ -39,26 +38,39 @@ class Controller:
             hitBlock  = self.getCorresBlock(address)
             if hitBlock:
                 print(str(self.processor) + "Write Hit \n")
-                state = self.cache.getL1BlockByAddress(address).getBitState()
+                state = self.cache.getBlockAddress(address).getBitState()
+                self.memoryBus.lockMe()
                 if state == "E":
                     self.cache.write(address, data, "M")
                 elif state == "M":
                     self.cache.write(address, data, "M")
                 elif state == "S":
                     self.cache.write(address, data, "M")
-                    self.memoryBus.lockMe()
                     sharedProcessors = self.memoryBus.sharedAddressP(address, self.processor)
                     self.memoryBus.changeStates(address, sharedProcessors, 1)
-                    self.memoryBus.unlockMe()
+                self.memoryBus.unlockMe()
             else:
                 print(str(self.processor) + "= Write Miss")
-                actualBlock = self.cache.write(address, data, "M")
                 self.memoryBus.lockMe()
-                if actualBlock.bitState == "M" and actualBlock.memoryAddress != address:
-                    self.memoryBus.writeMemory(actualBlock.memoryAddress, actualBlock.data)
+                processorsShared = self.memoryBus.sharedAddressP(address, self.processor)
+                if len(processorsShared) != 0:
+                    p = processorsShared[0]
+                    block = p.control.getCorresBlock(address)
+                    if block.bitState == "M":
+                        self.memoryBus.writeMemory(block.memoryAddress, block.data)
+                    blockWrite = self.cache.Write_mem(address, data, "M")
+                    if blockWrite.bitState == "M" and blockWrite.memoryAddress != address:
+                        self.memoryBus.writeMemory(blockWrite.memoryAddress, blockWrite.data)
+                    elif blockWrite.bitState == "s" and len(self.memoryBus.sharedAddressP(address, self.processor)) == 1:
+                        self.memoryBus.changeStates(blockWrite.memoryAddress, self.memoryBus.sharedAddressP(address, self.processor), 2)
+                    self.memoryBus.changeStates(address, processorsShared, 1)
                     
-                sharedProcessors = self.memoryBus.sharedAddressP(address, self.processor)
-                self.memoryBus.changeStates(address, sharedProcessors, 1)
+                    
+                else:
+                    blockWrite  = self.cache.Write_mem(address, data, "M")
+                    
+            
+
                 self.memoryBus.unlockMe()			
                 
         def read(self, address):
@@ -85,7 +97,7 @@ class Controller:
                     
                 if blockWrite.bitState == "M" and blockWrite.memoryAddress != address:
                     self.memoryBus.writeMemory(blockWrite.memoryAddress, blockWrite.data)
+                elif blockWrite.bitState == "s" and len(self.memoryBus.sharedAddressP(address, self.processor)) == 1:
+                    self.memoryBus.changeStates(blockWrite.memoryAddress, self.memoryBus.sharedAddressP(address, self.processor), 2)
                 self.memoryBus.unlockMe()
                 
-
-	

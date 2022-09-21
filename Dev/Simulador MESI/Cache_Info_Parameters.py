@@ -15,8 +15,8 @@
 class L1_Info:
 
 	#The atributes are initialized
-	def  __init__(self, Number):
-		self.Number = Number   		#Number of block
+	def  __init__(self, id):
+		self.Number = id   		#Number of block
 		self.bitState = "I"			#State of the block according to the MESI Protocol
 		self.memoryAddress = 0		#Memory address in the process
 		self.data = 0				#Hexadecimal data in the process
@@ -24,9 +24,10 @@ class L1_Info:
 
 	#This function will get the number block and set the value of the block
 	def getNumber(self):
-				return self.Number
+				return self.id
+
 	def setNumber(self, Number):
-				self.Number = Number
+				self.id = id
 
 
 	#This function will get the state block and set the state of the block according to the MESI protocol
@@ -55,4 +56,4 @@ class L1_Info:
 
 	#Monitory function just in case, this will help to the GUI
 	def printBlock(self):
-				print("ID " + str(self.Number) + "  State " + str(self.bitState)+ "  Address " + str(self.memoryAddress) +"  Data " + str(self.data)  )
+				print("ID " + str(self.id) + "  State " + str(self.bitState)+ "  Address " + str(self.memoryAddress) +"  Data " + str(self.data)  )

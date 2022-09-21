@@ -50,7 +50,7 @@ class MemoryBus:
 	def changeStates(self, address, processorsShared, change):
 		for processor in processorsShared:
             #Get the read/write information
-			block = processor.control.cache.getL1BlockByAddress(address)
+			block = processor.control.cache.getBlockAddress(address)
 			match change:
                 #Shared FLAG
 				case 0:

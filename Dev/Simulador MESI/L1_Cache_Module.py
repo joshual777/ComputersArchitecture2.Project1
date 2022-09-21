@@ -21,11 +21,11 @@ class L1_Block:
 
     #The function will get the address according to the execution process
     def getBlockAddress(self, address):
-        flag_block = L1_Info(0)                     #Use the first block element as flag
-        for L1_Info in self.L1_Blocks:              #Then will use the next in the block list
-            if L1_Info.memoryAddress == address:    #If memoryaddress equals to address 
-                flag_block = L1_Block
-        return flag_block                           #Return the flag, the address block
+            resultB = L1_Info(0)
+            for l1Block in self.L1_Blocks:
+                if l1Block.memoryAddress == address:	
+                    resultB = l1Block
+            return resultB 
 
 
     #Write function into address memory allocations
@@ -79,3 +79,6 @@ class L1_Block:
             print("Invalid Address")
 
         return block  
+
+    def getBlock(self, id):
+	    return self.L1_Blocks[id]
