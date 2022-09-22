@@ -203,6 +203,23 @@ class Design:
       self.processors[1].runThread(True)
       self.processors[2].runThread(True)
       self.processors[3].runThread(True)
+
+    def addInstruction(self):
+        
+        inst = self.entry.get()
+        self.entry.delete(0, END)
+        p = inst[:2]
+        match p:
+          case "P0":
+            self.processors[0].customInst = inst
+          case "P1":
+            self.processors[1].customInst = inst
+          case "P2":
+            self.processors[2].customInst = inst
+          case "P3":
+            self.processors[3].customInst = inst
+          case _:
+            print("No Instruction")    
       
 
     def Window_Design(self):
@@ -268,7 +285,7 @@ class Design:
             entry_isntruction = Entry(window, width = 30, bg= "#9EE6AA")
             entry_isntruction.place(x=720, y=600)
 
-            btn_insert = Button(window, text = "Add", height=2, bg= "#9EE6AA")
+            btn_insert = Button(window, text = "Add", command=self.addInstruction, height=2, bg= "#9EE6AA")
             btn_insert.place(x=800, y=630)
 
 
@@ -289,13 +306,14 @@ class Design:
             #BLOCKS INFORMATION SECTION 
 
             #BLOCK 0 INFORMATION
-            lbl_block0_1 = Label(window, text="Block 0", width=10, height=1, bg = "#bce784")
+
+            lbl_block0_1 = Label(self.root, text="Block 0", width=10, height=1, bg = "#bce784")
             lbl_block0_1.place(x=5, y=40)
-            lbl_block0_2 = Label(window, text="Bit State", width=10, height=1,bg = "#bce784")
+            lbl_block0_2 = Label(self.root, text="Bit State", width=10, height=1,bg = "#bce784")
             lbl_block0_2.place(x=5, y=60)
-            lbl_block0_3 = Label(window, text="Address", width=10, height=1,bg = "#bce784")
+            lbl_block0_3 = Label(self.root, text="Address", width=10, height=1,bg = "#bce784")
             lbl_block0_3.place(x=5, y=80)
-            lbl_block0_4 = Label(window, text="Value", width=10, height=1, bg = "#bce784")
+            lbl_block0_4 = Label(self.root, text="Value", width=10, height=1, bg = "#bce784")
             lbl_block0_4.place(x=5, y=100)
 
 
@@ -303,143 +321,146 @@ class Design:
             p0B0DL = Label(self.root, textvariable=self.P0_BLOCK1_S, height=1, bg = "#CE4912")
             p0B0DL.place(x=200, y=60)
 
-            p0B1DL = Label(self.root, textvariable=self.P0_BLOCK1_A, height=1, bg = "#CE4912")
-            p0B1DL.place(x=200, y=80)
+            p0B0DL = Label(self.root, textvariable=self.P0_BLOCK1_A, height=1, bg = "#CE4912")
+            p0B0DL.place(x=200, y=80)
 
-            p0B2DL = Label(self.root, textvariable=self.P0_BLOCK1_V, height=1, bg = "#CE4912")
-            p0B2DL.place(x=200, y=100)
+            p0B0DL = Label(self.root, textvariable=self.P0_BLOCK1_V, height=1, bg = "#CE4912")
+            p0B0DL.place(x=200, y=100)
 
             #Processor 1
             p1B0DL = Label(self.root, textvariable=self.P1_BLOCK1_S, height=1, bg = "#F36B1C")
             p1B0DL.place(x=350, y=60)
 
-            p1B1DL = Label(self.root, textvariable=self.P1_BLOCK1_A, height=1, bg = "#F36B1C")
-            p1B1DL.place(x=350, y=80)
+            p1B0DL = Label(self.root, textvariable=self.P1_BLOCK1_A, height=1, bg = "#F36B1C")
+            p1B0DL.place(x=350, y=80)
 
-            p1B2DL = Label(self.root, textvariable=self.P1_BLOCK1_V, height=1, bg = "#F36B1C")
-            p1B2DL.place(x=350, y=100)
+            p1B0DL = Label(self.root, textvariable=self.P1_BLOCK1_V, height=1, bg = "#F36B1C")
+            p1B0DL.place(x=350, y=100)
 
             #Processor 2
             p2B0DL = Label(self.root, textvariable=self.P2_BLOCK1_S, height=1, bg = "#0B6AB0")
             p2B0DL.place(x=500, y=60)
 
-            p2B1DL = Label(self.root, textvariable=self.P2_BLOCK1_A, height=1, bg = "#0B6AB0")
-            p2B1DL.place(x=500, y=80)
+            p2B0DL = Label(self.root, textvariable=self.P2_BLOCK1_A, height=1, bg = "#0B6AB0")
+            p2B0DL.place(x=500, y=80)
 
-            p2B2DL = Label(self.root, textvariable=self.P2_BLOCK1_V, height=1, bg = "#0B6AB0")
-            p2B2DL.place(x=500, y=100)
+            p2B0DL = Label(self.root, textvariable=self.P2_BLOCK1_V, height=1, bg = "#0B6AB0")
+            p2B0DL.place(x=500, y=100)
 
             #Processor 3
-            p2B0DL = Label(self.root, textvariable=self.P3_BLOCK1_S, height=1, bg = "#F8D605")
-            p2B0DL.place(x=650, y=60)
+            p3B0DL = Label(self.root, textvariable=self.P3_BLOCK1_S, height=1, bg = "#F8D605")
+            p3B0DL.place(x=650, y=60)
 
-            p3B1DL = Label(self.root, textvariable=self.P3_BLOCK1_A, height=1, bg = "#F8D605")
-            p3B1DL.place(x=650, y=80)
+            p3B0DL = Label(self.root, textvariable=self.P3_BLOCK1_A, height=1, bg = "#F8D605")
+            p3B0DL.place(x=650, y=80)
 
-            p3B2DL = Label(self.root, textvariable=self.P3_BLOCK1_V, height=1, bg = "#F8D605")
-            p3B2DL.place(x=650, y=100)
+            p3B0DL = Label(self.root, textvariable=self.P3_BLOCK1_V, height=1, bg = "#F8D605")
+            p3B0DL.place(x=650, y=100)
             
 
 
             #BLOCK 1 INFORMATION
-            lbl_block1_1 = Label(window, text="Block 1", width=10, height=1,bg = "#525174")
+            lbl_block1_1 = Label(self.root, text="Block 1", width=10, height=1,bg = "#525174")
             lbl_block1_1.place(x=5, y=140)
-            lbl_block1_2 = Label(window, text="Bit State", width=10, height=1,bg = "#525174")
+            lbl_block1_2 = Label(self.root, text="Bit State", width=10, height=1,bg = "#525174")
             lbl_block1_2.place(x=5, y=160)
-            lbl_block1_3 = Label(window, text="Address", width=10, height=1,bg = "#525174")
+            lbl_block1_3 = Label(self.root, text="Address", width=10, height=1,bg = "#525174")
             lbl_block1_3.place(x=5, y=180)
-            lbl_block1_4 = Label(window, text="Value", width=10,height=1, bg = "#525174")
+            lbl_block1_4 = Label(self.root, text="Value", width=10,height=1, bg = "#525174")
             lbl_block1_4.place(x=5, y=200)
 
             #Processor 0
-            p0B0DL = Label(self.root, textvariable=self.P0_BLOCK2_S, height=1, bg = "#CE4912")
-            p0B0DL.place(x=200, y=160)
+            p0B1DL = Label(self.root, textvariable=self.P0_BLOCK2_S, height=1, bg = "#CE4912")
+            p0B1DL.place(x=200, y=160)
 
             p0B1DL = Label(self.root, textvariable=self.P0_BLOCK2_A, height=1, bg = "#CE4912")
             p0B1DL.place(x=200, y=180)
 
-            p0B2DL = Label(self.root, textvariable=self.P0_BLOCK2_V, height=1, bg = "#CE4912")
-            p0B2DL.place(x=200, y=200)
+            p0B1DL = Label(self.root, textvariable=self.P0_BLOCK2_V, height=1, bg = "#CE4912")
+            p0B1DL.place(x=200, y=200)
 
             #Processor 1
-            p1B0DL = Label(self.root, textvariable=self.P1_BLOCK2_S, height=1, bg = "#F36B1C")
-            p1B0DL.place(x=350, y=160)
+            p1B1DL = Label(self.root, textvariable=self.P1_BLOCK2_S, height=1, bg = "#F36B1C")
+            p1B1DL.place(x=350, y=160)
 
             p1B1DL = Label(self.root, textvariable=self.P1_BLOCK2_A, height=1, bg = "#F36B1C")
             p1B1DL.place(x=350, y=180)
 
-            p1B2DL = Label(self.root, textvariable=self.P1_BLOCK2_V, height=1, bg = "#F36B1C")
-            p1B2DL.place(x=350, y=200)
+            p1B1DL = Label(self.root, textvariable=self.P1_BLOCK2_V, height=1, bg = "#F36B1C")
+            p1B1DL.place(x=350, y=200)
 
             #Processor 2
-            p2B0DL = Label(self.root, textvariable=self.P2_BLOCK2_S, height=1, bg = "#0B6AB0")
-            p2B0DL.place(x=500, y=160)
+            p2B1DL = Label(self.root, textvariable=self.P2_BLOCK2_S, height=1, bg = "#0B6AB0")
+            p2B1DL.place(x=500, y=160)
 
             p2B1DL = Label(self.root, textvariable=self.P2_BLOCK2_A, height=1, bg = "#0B6AB0")
             p2B1DL.place(x=500, y=180)
 
-            p2B2DL = Label(self.root, textvariable=self.P2_BLOCK2_V, height=1, bg = "#0B6AB0")
-            p2B2DL.place(x=500, y=200)
+            p2B1DL = Label(self.root, textvariable=self.P2_BLOCK2_V, height=1, bg = "#0B6AB0")
+            p2B1DL.place(x=500, y=200)
 
             #Processor 3
-            p2B0DL = Label(self.root, textvariable=self.P3_BLOCK2_S, height=1, bg = "#F8D605")
-            p2B0DL.place(x=650, y=160)
+            p3B1DL = Label(self.root, textvariable=self.P3_BLOCK2_S, height=1, bg = "#F8D605")
+            p3B1DL.place(x=650, y=160)
 
             p3B1DL = Label(self.root, textvariable=self.P3_BLOCK2_A, height=1, bg = "#F8D605")
             p3B1DL.place(x=650, y=180)
 
-            p3B2DL = Label(self.root, textvariable=self.P3_BLOCK2_V, height=1, bg = "#F8D605")
-            p3B2DL.place(x=650, y=200)
+            p3B1DL = Label(self.root, textvariable=self.P3_BLOCK2_V, height=1, bg = "#F8D605")
+            p3B1DL.place(x=650, y=200)
+
+
+
 
             #BLOCK 2 INFORMATION
-            lbl_block2_1 = Label(window, text="Block 2", width=10, height=1, bg = "#348aa7")
+            lbl_block2_1 = Label(self.root, text="Block 2", width=10, height=1, bg = "#348aa7")
             lbl_block2_1.place(x=5, y=240)
-            lbl_block2_2 = Label(window, text="Bit State", width=10, height=1, bg = "#348aa7")
+            lbl_block2_2 = Label(self.root, text="Bit State", width=10, height=1, bg = "#348aa7")
             lbl_block2_2.place(x=5, y=260)
-            lbl_block2_3 = Label(window, text="Address", width=10, height=1, bg = "#348aa7")
+            lbl_block2_3 = Label(self.root, text="Address", width=10, height=1, bg = "#348aa7")
             lbl_block2_3.place(x=5, y=280)
-            lbl_block2_4 = Label(window, text="Value", width=10, height=1, bg = "#348aa7")
+            lbl_block2_4 = Label(self.root, text="Value", width=10, height=1, bg = "#348aa7")
             lbl_block2_4.place(x=5, y=300)
 
 
             #Processor 0
-            p0B0DL = Label(self.root, textvariable=self.P0_BLOCK3_S, height=1, bg = "#CE4912")
-            p0B0DL.place(x=200, y=260)
+            p0B2DL = Label(window, textvariable=self.P0_BLOCK3_S, height=1, bg = "#CE4912")
+            p0B2DL.place(x=200, y=260)
 
-            p0B1DL = Label(self.root, textvariable=self.P0_BLOCK3_A, height=1, bg = "#CE4912")
-            p0B1DL.place(x=200, y=280)
+            p0B2DL = Label(window, textvariable=self.P0_BLOCK3_A, height=1, bg = "#CE4912")
+            p0B2DL.place(x=200, y=280)
 
-            p0B2DL = Label(self.root, textvariable=self.P0_BLOCK3_V, height=1, bg = "#CE4912")
+            p0B2DL = Label(window, textvariable=self.P0_BLOCK3_V, height=1, bg = "#CE4912")
             p0B2DL.place(x=200, y=300)
 
             #Processor 1
-            p1B0DL = Label(self.root, textvariable=self.P1_BLOCK3_S, height=1, bg = "#F36B1C")
-            p1B0DL.place(x=350, y=260)
+            p1B2DL = Label(window, textvariable=self.P1_BLOCK3_S, height=1, bg = "#F36B1C")
+            p1B2DL.place(x=350, y=260)
 
-            p1B1DL = Label(self.root, textvariable=self.P1_BLOCK3_A, height=1, bg = "#F36B1C")
-            p1B1DL.place(x=350, y=280)
+            p1B2DL = Label(window, textvariable=self.P1_BLOCK3_A, height=1, bg = "#F36B1C")
+            p1B2DL.place(x=350, y=280)
 
-            p1B2DL = Label(self.root, textvariable=self.P1_BLOCK3_V, height=1, bg = "#F36B1C")
+            p1B2DL = Label(window, textvariable=self.P1_BLOCK3_V, height=1, bg = "#F36B1C")
             p1B2DL.place(x=350, y=300)
 
             #Processor 2
-            p2B0DL = Label(self.root, textvariable=self.P2_BLOCK3_S, height=1, bg = "#0B6AB0")
-            p2B0DL.place(x=500, y=260)
+            p2B2DL = Label(window, textvariable=self.P2_BLOCK3_S, height=1, bg = "#0B6AB0")
+            p2B2DL.place(x=500, y=260)
 
-            p2B1DL = Label(self.root, textvariable=self.P2_BLOCK3_A, height=1, bg = "#0B6AB0")
-            p2B1DL.place(x=500, y=280)
+            p2B2DL = Label(window, textvariable=self.P2_BLOCK3_A, height=1, bg = "#0B6AB0")
+            p2B2DL.place(x=500, y=280)
 
-            p2B2DL = Label(self.root, textvariable=self.P2_BLOCK3_V, height=1, bg = "#0B6AB0")
+            p2B2DL = Label(window, textvariable=self.P2_BLOCK3_V, height=1, bg = "#0B6AB0")
             p2B2DL.place(x=500, y=300)
 
             #Processor 3
-            p2B0DL = Label(self.root, textvariable=self.P3_BLOCK3_S, height=1, bg = "#F8D605")
-            p2B0DL.place(x=650, y=260)
+            p2B2DL = Label(window, textvariable=self.P3_BLOCK3_S, height=1, bg = "#F8D605")
+            p2B2DL.place(x=650, y=260)
 
-            p3B1DL = Label(self.root, textvariable=self.P3_BLOCK3_A, height=1, bg = "#F8D605")
-            p3B1DL.place(x=650, y=280)
+            p3B2DL = Label(window, textvariable=self.P3_BLOCK3_A, height=1, bg = "#F8D605")
+            p3B2DL.place(x=650, y=280)
 
-            p3B2DL = Label(self.root, textvariable=self.P3_BLOCK3_V, height=1, bg = "#F8D605")
+            p3B2DL = Label(window, textvariable=self.P3_BLOCK3_V, height=1, bg = "#F8D605")
             p3B2DL.place(x=650, y=300)
 
 
@@ -455,43 +476,43 @@ class Design:
 
 
             #Processor 0
-            p0B0DL = Label(self.root, textvariable=self.P0_BLOCK4_S, height=1, bg = "#CE4912")
+            p0B0DL = Label(window, textvariable=self.P0_BLOCK4_S, height=1, bg = "#CE4912")
             p0B0DL.place(x=200, y=360)
 
-            p0B1DL = Label(self.root, textvariable=self.P0_BLOCK4_A, height=1, bg = "#CE4912")
+            p0B1DL = Label(window, textvariable=self.P0_BLOCK4_A, height=1, bg = "#CE4912")
             p0B1DL.place(x=200, y=380)
 
-            p0B2DL = Label(self.root, textvariable=self.P0_BLOCK4_V, height=1, bg = "#CE4912")
+            p0B2DL = Label(window, textvariable=self.P0_BLOCK4_V, height=1, bg = "#CE4912")
             p0B2DL.place(x=200, y=400)
 
             #Processor 1
-            p1B0DL = Label(self.root, textvariable=self.P1_BLOCK4_S, height=1, bg = "#F36B1C")
+            p1B0DL = Label(window, textvariable=self.P1_BLOCK4_S, height=1, bg = "#F36B1C")
             p1B0DL.place(x=350, y=360)
 
-            p1B1DL = Label(self.root, textvariable=self.P1_BLOCK4_A, height=1, bg = "#F36B1C")
+            p1B1DL = Label(window, textvariable=self.P1_BLOCK4_A, height=1, bg = "#F36B1C")
             p1B1DL.place(x=350, y=380)
 
-            p1B2DL = Label(self.root, textvariable=self.P1_BLOCK4_V, height=1, bg = "#F36B1C")
+            p1B2DL = Label(window, textvariable=self.P1_BLOCK4_V, height=1, bg = "#F36B1C")
             p1B2DL.place(x=350, y=400)
 
             #Processor 2
-            p2B0DL = Label(self.root, textvariable=self.P2_BLOCK4_S, height=1, bg = "#0B6AB0")
+            p2B0DL = Label(window, textvariable=self.P2_BLOCK4_S, height=1, bg = "#0B6AB0")
             p2B0DL.place(x=500, y=360)
 
-            p2B1DL = Label(self.root, textvariable=self.P2_BLOCK4_A, height=1, bg = "#0B6AB0")
+            p2B1DL = Label(window, textvariable=self.P2_BLOCK4_A, height=1, bg = "#0B6AB0")
             p2B1DL.place(x=500, y=380)
 
-            p2B2DL = Label(self.root, textvariable=self.P2_BLOCK4_V, height=1, bg = "#0B6AB0")
+            p2B2DL = Label(window, textvariable=self.P2_BLOCK4_V, height=1, bg = "#0B6AB0")
             p2B2DL.place(x=500, y=400)
 
             #Processor 3
-            p2B0DL = Label(self.root, textvariable=self.P3_BLOCK4_S, height=1, bg = "#F8D605")
+            p2B0DL = Label(window, textvariable=self.P3_BLOCK4_S, height=1, bg = "#F8D605")
             p2B0DL.place(x=650, y=360)
 
-            p3B1DL = Label(self.root, textvariable=self.P3_BLOCK4_A, height=1, bg = "#F8D605")
+            p3B1DL = Label(window, textvariable=self.P3_BLOCK4_A, height=1, bg = "#F8D605")
             p3B1DL.place(x=650, y=380)
 
-            p3B2DL = Label(self.root, textvariable=self.P3_BLOCK4_V, height=1, bg = "#F8D605")
+            p3B2DL = Label(window, textvariable=self.P3_BLOCK4_V, height=1, bg = "#F8D605")
             p3B2DL.place(x=650, y=400)
 
 
@@ -576,7 +597,6 @@ class Design:
 
     def updateUI(self ):
         
-
       while 1:
         #self.P0AInst.set(self.processors[0].instRunning)
         #self.P0LInst.set(self.processors[0].lastInst)
@@ -659,3 +679,5 @@ class Design:
  
         time.sleep(0.1)
 
+
+  
