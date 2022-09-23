@@ -1,683 +1,788 @@
 from tkinter import *
-import time
-from Memory import Memory
-from SharedBus import MemoryBus
-from Processor import Processor
-import threading
+from  tkinter import ttk
+import tkinter
+from threading import *
+from Functions import *
 
-#Main Window design paramaters 
-class Design:
+# main window
+class GUI(tkinter.Tk):
 
-    def  __init__(self, root):
+    def __init__(root):
 
-        #Windows basic features desing 
-        self.root = Tk = root
-        self.root.geometry("1000x700")
-        self.root.title("MESI PROTOCOL SIMULATOR")
-        self.root.resizable(False, False)
-
-        #Multiprocessor elements 
-        self.processors = []
-        self.memory = Memory()
-        self.bus = MemoryBus(self.memory)
+        #Initialize processors and design features 
 
 
-        self.P0AInst= StringVar()
-        self.P0AInst.set("P0 : ----------")
-        self.P0LInst= StringVar()
-        self.P0LInst.set("P0 : ----------")
+        # create Processors
+        root.processor_0 = CPU(0)   #Processor 0 instance
+        root.processor_1 = CPU(1)   #Processor 1 instance
+        root.processor_2 = CPU(2)   #Processor 2 instance
+        root.processor_3 = CPU(3)   #Processor 3 instance
 
+        root.Array_list = [root.processor_0, root.processor_1, root.processor_2, root.processor_3]  #create CPUs array
+        root.mainMemory = MainMemory()                                #create main memory
+        root.bus = Bus(root.Array_list, root.mainMemory)                #create bus
 
-        #INITIALIZED P0 
-
-        #VALUE
-        self.P0_BLOCK1_V= StringVar()
-        self.P0_BLOCK1_V.set("----------")
-        self.P0_BLOCK2_V= StringVar()
-        self.P0_BLOCK2_V.set("----------")
-        self.P0_BLOCK3_V= StringVar()
-        self.P0_BLOCK3_V.set("----------")
-        self.P0_BLOCK4_V= StringVar()
-        self.P0_BLOCK4_V.set("----------")
-
-        #ADDRESS
-        self.P0_BLOCK1_A= StringVar()
-        self.P0_BLOCK1_A.set("----------")
-        self.P0_BLOCK2_A= StringVar()
-        self.P0_BLOCK2_A.set("----------")
-        self.P0_BLOCK3_A= StringVar()
-        self.P0_BLOCK3_A.set("----------")
-        self.P0_BLOCK4_A= StringVar()
-        self.P0_BLOCK4_A.set("----------")
-
-        #STATE BIT
-        self.P0_BLOCK1_S= StringVar()
-        self.P0_BLOCK1_S.set("----------")
-        self.P0_BLOCK2_S= StringVar()
-        self.P0_BLOCK2_S.set("----------")
-        self.P0_BLOCK3_S= StringVar()
-        self.P0_BLOCK3_S.set("----------")
-        self.P0_BLOCK4_S= StringVar()
-        self.P0_BLOCK4_S.set("----------")
-
-
-        #INITIALIZED P1
-
-        #VALUE
-        self.P1_BLOCK1_V= StringVar()
-        self.P1_BLOCK1_V.set("----------")
-        self.P1_BLOCK2_V= StringVar()
-        self.P1_BLOCK2_V.set("----------")
-        self.P1_BLOCK3_V= StringVar()
-        self.P1_BLOCK3_V.set("----------")
-        self.P1_BLOCK4_V= StringVar()
-        self.P1_BLOCK4_V.set("----------")
-
-        #ADDRESS
-        self.P1_BLOCK1_A= StringVar()
-        self.P1_BLOCK1_A.set("----------")
-        self.P1_BLOCK2_A= StringVar()
-        self.P1_BLOCK2_A.set("----------")
-        self.P1_BLOCK3_A= StringVar()
-        self.P1_BLOCK3_A.set("----------")
-        self.P1_BLOCK4_A= StringVar()
-        self.P1_BLOCK4_A.set("----------")
-
-        #STATE BIT
-        self.P1_BLOCK1_S= StringVar()
-        self.P1_BLOCK1_S.set("----------")
-        self.P1_BLOCK2_S= StringVar()
-        self.P1_BLOCK2_S.set("----------")
-        self.P1_BLOCK3_S= StringVar()
-        self.P1_BLOCK3_S.set("----------")
-        self.P1_BLOCK4_S= StringVar()
-        self.P1_BLOCK4_S.set("----------")
-
-
-        #INITIALIZED P2
-
-        #VALUE
-        self.P2_BLOCK1_V= StringVar()
-        self.P2_BLOCK1_V.set("----------")
-        self.P2_BLOCK2_V= StringVar()
-        self.P2_BLOCK2_V.set("----------")
-        self.P2_BLOCK3_V= StringVar()
-        self.P2_BLOCK3_V.set("----------")
-        self.P2_BLOCK4_V= StringVar()
-        self.P2_BLOCK4_V.set("----------")
-
-        #ADDRESS
-        self.P2_BLOCK1_A= StringVar()
-        self.P2_BLOCK1_A.set("----------")
-        self.P2_BLOCK2_A= StringVar()
-        self.P2_BLOCK2_A.set("----------")
-        self.P2_BLOCK3_A= StringVar()
-        self.P2_BLOCK3_A.set("----------")
-        self.P2_BLOCK4_A= StringVar()
-        self.P2_BLOCK4_A.set("----------")
-
-        #STATE BIT
-        self.P2_BLOCK1_S= StringVar()
-        self.P2_BLOCK1_S.set("----------")
-        self.P2_BLOCK2_S= StringVar()
-        self.P2_BLOCK2_S.set("----------")
-        self.P2_BLOCK3_S= StringVar()
-        self.P2_BLOCK3_S.set("----------")
-        self.P2_BLOCK4_S= StringVar()
-        self.P2_BLOCK4_S.set("----------")
-
-        #INITIALIZED  P3
-
-        #VALUE
-        self.P3_BLOCK1_V= StringVar()
-        self.P3_BLOCK1_V.set("----------")
-        self.P3_BLOCK2_V= StringVar()
-        self.P3_BLOCK2_V.set("----------")
-        self.P3_BLOCK3_V= StringVar()
-        self.P3_BLOCK3_V.set("----------")
-        self.P3_BLOCK4_V= StringVar()
-        self.P3_BLOCK4_V.set("----------")
-
-        #ADDRESS
-        self.P3_BLOCK1_A= StringVar()
-        self.P3_BLOCK1_A.set("----------")
-        self.P3_BLOCK2_A= StringVar()
-        self.P3_BLOCK2_A.set("----------")
-        self.P3_BLOCK3_A= StringVar()
-        self.P3_BLOCK3_A.set("----------")
-        self.P3_BLOCK4_A= StringVar()
-        self.P3_BLOCK4_A.set("----------")
-
-        #STATE BIT
-        self.P3_BLOCK1_S= StringVar()
-        self.P3_BLOCK1_S.set("----------")
-        self.P3_BLOCK2_S= StringVar()
-        self.P3_BLOCK2_S.set("----------")
-        self.P3_BLOCK3_S= StringVar()
-        self.P3_BLOCK3_S.set("----------")
-        self.P3_BLOCK4_S= StringVar()
-        self.P3_BLOCK4_S.set("----------")
-
-        #MEMORY CELLS
-        self.CELL0 = StringVar()
-        self.CELL0.set("----------")
-        self.CELL1 = StringVar()
-        self.CELL1.set("----------")
-        self.CELL2 = StringVar()
-        self.CELL2.set("----------")
-        self.CELL3 = StringVar()
-        self.CELL3.set("----------")
-        self.CELL4 = StringVar()
-        self.CELL4.set("----------")
-        self.CELL5 = StringVar()
-        self.CELL5.set("----------")
-        self.CELL6 = StringVar()
-        self.CELL6.set("----------")
-        self.CELL7 = StringVar()
-        self.CELL7.set("----------")
-
-
-        self.Window_Design()
-        self.Thread_Processors()
-
-
-
-    #PROTOCOL PROCESS SECTION
-    #In this section Start, Stop and Step by Step functions are intialized
-
-    def START_SIMULATION(self):
-      self.processors[0].runThread(False)
-      self.processors[1].runThread(False)
-      self.processors[2].runThread(False)
-      self.processors[3].runThread(False)
-
-    def STOP_SIMULATION(self):
-      self.processors[0].stopThread()
-      self.processors[1].stopThread()
-      self.processors[2].stopThread()
-      self.processors[3].stopThread()
-
-
-    def STEP_STEP_SIMULATION(self):
-      self.processors[0].runThread(True)
-      self.processors[1].runThread(True)
-      self.processors[2].runThread(True)
-      self.processors[3].runThread(True)
-
-    def addInstruction(self):
+        root.stopFlag = 1    # Stop Signal
         
-        inst = self.entry.get()
-        self.entry.delete(0, END)
-        p = inst[:2]
-        match p:
-          case "P0":
-            self.processors[0].customInst = inst
-          case "P1":
-            self.processors[1].customInst = inst
-          case "P2":
-            self.processors[2].customInst = inst
-          case "P3":
-            self.processors[3].customInst = inst
-          case _:
-            print("No Instruction")    
-      
-
-    def Window_Design(self):
-
-            window = self.root
-
-            #Background canvas and color 
-            backgorund = Canvas(window, width= 1000, height= 700, bg = "#FFE373")
-            backgorund.place(x= 0, y = 0)
-
-
-            """
-            p0AInstLabel = Label(self.root, textvariable=self.P0AInst)
-            p0AInstLabel.grid(row=1, column=2)
-
-            p0LInstLabel = Label(self.root, textvariable=self.P0LInst)
-            p0LInstLabel.grid(row=2, column=2)
-            """
-
-
-
-
-            #CONTROL SECTION 
-
-            #Label Processor 0
-            lbl_procesor0 = Label(window, text="Processor 0", width=15, height=2, bg = "#CE4912")
-            lbl_procesor0.place(x=200, y=0)
-
-            
-            #Label Processor 1
-            lbl_processor1 = Label(window, text="Processor 1", width=15, height=2, bg= "#F36B1C")
-            lbl_processor1.place(x=350, y=0)
-
-            #Label Processor 2
-            lbl_processor2 = Label(window, text="Processor 2", width=15, height=2, bg = "#0B6AB0")
-            lbl_processor2.place(x=500, y=0)
-
-            #Label Processor 3
-            lbl_procesor3 = Label(window, text="Processor 3", width=15, height=2, bg = "#F8D605")
-            lbl_procesor3.place(x=650, y=0)
-
-
-
-
-            #Action Buttons Section
-
-            #Start simulation button 
-            btn_start = Button(window, text = "Start Simulation", command= self.START_SIMULATION,  height=2, bg= "#9EE6AA")
-            btn_start.place(x=700, y=450)
-
-            #Stop simulation button
-            btn_stop = Button(window, text = "Stop Simulation",  command= self.STOP_SIMULATION, height=2, bg= "#9EE6AA")
-            btn_stop.place(x=800, y=450)
-
-            #Step by Step simulation button
-            btn_step = Button(window, text = "Step by Step Simulation", command=self.STEP_STEP_SIMULATION,  height=2, bg= "#9EE6AA")
-            btn_step.place(x=730, y=500)
-
-            #Insert Label Instruction
-            lblP3 = Label(window, text="Insert Instruction", width=28, height=2, bg= "#9EE6AA")
-            lblP3.place(x=700, y=550)
-
-            entry_isntruction = Entry(window, width = 30, bg= "#9EE6AA")
-            entry_isntruction.place(x=720, y=600)
-
-            btn_insert = Button(window, text = "Add", command=self.addInstruction, height=2, bg= "#9EE6AA")
-            btn_insert.place(x=800, y=630)
-
-
-            #---------------------------------------------------------------------------------
-
-            #lblP3 = Label(window, text="Alertas", width=30, height=2)
-            #lblP3.grid(row=13, column=9)
-            
-            """
-            lbl = Label(window, text="", width=10, height=4)
-            lbl.grid(row=0, column=0)
-            lblE = Label(window, text="Ejecutando", width=30, height=2)
-            lblE.grid(row=1, column=0)
-            lblU = Label(window, text="Última ejecución", width=30, height=2)
-            lblU.grid(row=2, column=0)
-            """
-
-            #BLOCKS INFORMATION SECTION 
-
-            #BLOCK 0 INFORMATION
-
-            lbl_block0_1 = Label(self.root, text="Block 0", width=10, height=1, bg = "#bce784")
-            lbl_block0_1.place(x=5, y=40)
-            lbl_block0_2 = Label(self.root, text="Bit State", width=10, height=1,bg = "#bce784")
-            lbl_block0_2.place(x=5, y=60)
-            lbl_block0_3 = Label(self.root, text="Address", width=10, height=1,bg = "#bce784")
-            lbl_block0_3.place(x=5, y=80)
-            lbl_block0_4 = Label(self.root, text="Value", width=10, height=1, bg = "#bce784")
-            lbl_block0_4.place(x=5, y=100)
-
-
-            #Processor 0
-            p0B0DL = Label(self.root, textvariable=self.P0_BLOCK1_S, height=1, bg = "#CE4912")
-            p0B0DL.place(x=200, y=60)
-
-            p0B0DL = Label(self.root, textvariable=self.P0_BLOCK1_A, height=1, bg = "#CE4912")
-            p0B0DL.place(x=200, y=80)
-
-            p0B0DL = Label(self.root, textvariable=self.P0_BLOCK1_V, height=1, bg = "#CE4912")
-            p0B0DL.place(x=200, y=100)
-
-            #Processor 1
-            p1B0DL = Label(self.root, textvariable=self.P1_BLOCK1_S, height=1, bg = "#F36B1C")
-            p1B0DL.place(x=350, y=60)
-
-            p1B0DL = Label(self.root, textvariable=self.P1_BLOCK1_A, height=1, bg = "#F36B1C")
-            p1B0DL.place(x=350, y=80)
-
-            p1B0DL = Label(self.root, textvariable=self.P1_BLOCK1_V, height=1, bg = "#F36B1C")
-            p1B0DL.place(x=350, y=100)
-
-            #Processor 2
-            p2B0DL = Label(self.root, textvariable=self.P2_BLOCK1_S, height=1, bg = "#0B6AB0")
-            p2B0DL.place(x=500, y=60)
-
-            p2B0DL = Label(self.root, textvariable=self.P2_BLOCK1_A, height=1, bg = "#0B6AB0")
-            p2B0DL.place(x=500, y=80)
-
-            p2B0DL = Label(self.root, textvariable=self.P2_BLOCK1_V, height=1, bg = "#0B6AB0")
-            p2B0DL.place(x=500, y=100)
-
-            #Processor 3
-            p3B0DL = Label(self.root, textvariable=self.P3_BLOCK1_S, height=1, bg = "#F8D605")
-            p3B0DL.place(x=650, y=60)
-
-            p3B0DL = Label(self.root, textvariable=self.P3_BLOCK1_A, height=1, bg = "#F8D605")
-            p3B0DL.place(x=650, y=80)
-
-            p3B0DL = Label(self.root, textvariable=self.P3_BLOCK1_V, height=1, bg = "#F8D605")
-            p3B0DL.place(x=650, y=100)
-            
-
-
-            #BLOCK 1 INFORMATION
-            lbl_block1_1 = Label(self.root, text="Block 1", width=10, height=1,bg = "#525174")
-            lbl_block1_1.place(x=5, y=140)
-            lbl_block1_2 = Label(self.root, text="Bit State", width=10, height=1,bg = "#525174")
-            lbl_block1_2.place(x=5, y=160)
-            lbl_block1_3 = Label(self.root, text="Address", width=10, height=1,bg = "#525174")
-            lbl_block1_3.place(x=5, y=180)
-            lbl_block1_4 = Label(self.root, text="Value", width=10,height=1, bg = "#525174")
-            lbl_block1_4.place(x=5, y=200)
-
-            #Processor 0
-            p0B1DL = Label(self.root, textvariable=self.P0_BLOCK2_S, height=1, bg = "#CE4912")
-            p0B1DL.place(x=200, y=160)
-
-            p0B1DL = Label(self.root, textvariable=self.P0_BLOCK2_A, height=1, bg = "#CE4912")
-            p0B1DL.place(x=200, y=180)
-
-            p0B1DL = Label(self.root, textvariable=self.P0_BLOCK2_V, height=1, bg = "#CE4912")
-            p0B1DL.place(x=200, y=200)
-
-            #Processor 1
-            p1B1DL = Label(self.root, textvariable=self.P1_BLOCK2_S, height=1, bg = "#F36B1C")
-            p1B1DL.place(x=350, y=160)
-
-            p1B1DL = Label(self.root, textvariable=self.P1_BLOCK2_A, height=1, bg = "#F36B1C")
-            p1B1DL.place(x=350, y=180)
-
-            p1B1DL = Label(self.root, textvariable=self.P1_BLOCK2_V, height=1, bg = "#F36B1C")
-            p1B1DL.place(x=350, y=200)
-
-            #Processor 2
-            p2B1DL = Label(self.root, textvariable=self.P2_BLOCK2_S, height=1, bg = "#0B6AB0")
-            p2B1DL.place(x=500, y=160)
-
-            p2B1DL = Label(self.root, textvariable=self.P2_BLOCK2_A, height=1, bg = "#0B6AB0")
-            p2B1DL.place(x=500, y=180)
-
-            p2B1DL = Label(self.root, textvariable=self.P2_BLOCK2_V, height=1, bg = "#0B6AB0")
-            p2B1DL.place(x=500, y=200)
-
-            #Processor 3
-            p3B1DL = Label(self.root, textvariable=self.P3_BLOCK2_S, height=1, bg = "#F8D605")
-            p3B1DL.place(x=650, y=160)
-
-            p3B1DL = Label(self.root, textvariable=self.P3_BLOCK2_A, height=1, bg = "#F8D605")
-            p3B1DL.place(x=650, y=180)
-
-            p3B1DL = Label(self.root, textvariable=self.P3_BLOCK2_V, height=1, bg = "#F8D605")
-            p3B1DL.place(x=650, y=200)
-
-
-
-
-            #BLOCK 2 INFORMATION
-            lbl_block2_1 = Label(self.root, text="Block 2", width=10, height=1, bg = "#348aa7")
-            lbl_block2_1.place(x=5, y=240)
-            lbl_block2_2 = Label(self.root, text="Bit State", width=10, height=1, bg = "#348aa7")
-            lbl_block2_2.place(x=5, y=260)
-            lbl_block2_3 = Label(self.root, text="Address", width=10, height=1, bg = "#348aa7")
-            lbl_block2_3.place(x=5, y=280)
-            lbl_block2_4 = Label(self.root, text="Value", width=10, height=1, bg = "#348aa7")
-            lbl_block2_4.place(x=5, y=300)
-
-
-            #Processor 0
-            p0B2DL = Label(window, textvariable=self.P0_BLOCK3_S, height=1, bg = "#CE4912")
-            p0B2DL.place(x=200, y=260)
-
-            p0B2DL = Label(window, textvariable=self.P0_BLOCK3_A, height=1, bg = "#CE4912")
-            p0B2DL.place(x=200, y=280)
-
-            p0B2DL = Label(window, textvariable=self.P0_BLOCK3_V, height=1, bg = "#CE4912")
-            p0B2DL.place(x=200, y=300)
-
-            #Processor 1
-            p1B2DL = Label(window, textvariable=self.P1_BLOCK3_S, height=1, bg = "#F36B1C")
-            p1B2DL.place(x=350, y=260)
-
-            p1B2DL = Label(window, textvariable=self.P1_BLOCK3_A, height=1, bg = "#F36B1C")
-            p1B2DL.place(x=350, y=280)
-
-            p1B2DL = Label(window, textvariable=self.P1_BLOCK3_V, height=1, bg = "#F36B1C")
-            p1B2DL.place(x=350, y=300)
-
-            #Processor 2
-            p2B2DL = Label(window, textvariable=self.P2_BLOCK3_S, height=1, bg = "#0B6AB0")
-            p2B2DL.place(x=500, y=260)
-
-            p2B2DL = Label(window, textvariable=self.P2_BLOCK3_A, height=1, bg = "#0B6AB0")
-            p2B2DL.place(x=500, y=280)
-
-            p2B2DL = Label(window, textvariable=self.P2_BLOCK3_V, height=1, bg = "#0B6AB0")
-            p2B2DL.place(x=500, y=300)
-
-            #Processor 3
-            p2B2DL = Label(window, textvariable=self.P3_BLOCK3_S, height=1, bg = "#F8D605")
-            p2B2DL.place(x=650, y=260)
-
-            p3B2DL = Label(window, textvariable=self.P3_BLOCK3_A, height=1, bg = "#F8D605")
-            p3B2DL.place(x=650, y=280)
-
-            p3B2DL = Label(window, textvariable=self.P3_BLOCK3_V, height=1, bg = "#F8D605")
-            p3B2DL.place(x=650, y=300)
-
-
-            #BLOCK 3 INFORMATION
-            lbl_block3_1 = Label(window, text="Block 3", width=10, height=1, bg = "#5dd39e")
-            lbl_block3_1.place(x=5, y=340)
-            lbl_block3_2 = Label(window, text="Bit Satate", width=10, height=1, bg = "#5dd39e")
-            lbl_block3_2.place(x=5, y=360)
-            lbl_block3_3 = Label(window, text="Address", width=10, height=1,  bg = "#5dd39e")
-            lbl_block3_3.place(x=5, y=380)
-            lbl_block3_4 = Label(window, text="Value", width=10, height=1, bg = "#5dd39e")
-            lbl_block3_4.place(x=5, y=400)
-
-
-            #Processor 0
-            p0B0DL = Label(window, textvariable=self.P0_BLOCK4_S, height=1, bg = "#CE4912")
-            p0B0DL.place(x=200, y=360)
-
-            p0B1DL = Label(window, textvariable=self.P0_BLOCK4_A, height=1, bg = "#CE4912")
-            p0B1DL.place(x=200, y=380)
-
-            p0B2DL = Label(window, textvariable=self.P0_BLOCK4_V, height=1, bg = "#CE4912")
-            p0B2DL.place(x=200, y=400)
-
-            #Processor 1
-            p1B0DL = Label(window, textvariable=self.P1_BLOCK4_S, height=1, bg = "#F36B1C")
-            p1B0DL.place(x=350, y=360)
-
-            p1B1DL = Label(window, textvariable=self.P1_BLOCK4_A, height=1, bg = "#F36B1C")
-            p1B1DL.place(x=350, y=380)
-
-            p1B2DL = Label(window, textvariable=self.P1_BLOCK4_V, height=1, bg = "#F36B1C")
-            p1B2DL.place(x=350, y=400)
-
-            #Processor 2
-            p2B0DL = Label(window, textvariable=self.P2_BLOCK4_S, height=1, bg = "#0B6AB0")
-            p2B0DL.place(x=500, y=360)
-
-            p2B1DL = Label(window, textvariable=self.P2_BLOCK4_A, height=1, bg = "#0B6AB0")
-            p2B1DL.place(x=500, y=380)
-
-            p2B2DL = Label(window, textvariable=self.P2_BLOCK4_V, height=1, bg = "#0B6AB0")
-            p2B2DL.place(x=500, y=400)
-
-            #Processor 3
-            p2B0DL = Label(window, textvariable=self.P3_BLOCK4_S, height=1, bg = "#F8D605")
-            p2B0DL.place(x=650, y=360)
-
-            p3B1DL = Label(window, textvariable=self.P3_BLOCK4_A, height=1, bg = "#F8D605")
-            p3B1DL.place(x=650, y=380)
-
-            p3B2DL = Label(window, textvariable=self.P3_BLOCK4_V, height=1, bg = "#F8D605")
-            p3B2DL.place(x=650, y=400)
-
-
-
-            #LABEL BUS 
-            lbl_bus = Label(window,  width=1000, height=1, bg = "red")
-            lbl_bus.place(x=0, y= 425)
-
-            lbl_bus = Label(window, text="Shared bus", width=20, height=1, bg = "red")
-            lbl_bus.place(x=390, y= 425)
-
-            #MAIN MEMORY SECTION 
-
-            #Main Memory Cells
-            lbl_mainmen = Label(window, text="Main Memory Blocks", height=1, bg = "cyan")
-            lbl_mainmen.place(x=390, y=450)
-
-            lbl_cell0 = Label(window, text="0b000", bg = "#FFE373")
-            lbl_cell0.place(x=360, y=480)
-
-            lbl_cell1 = Label(window, text="0b001", bg = "#FFE373")
-            lbl_cell1.place(x=360, y=500)
-
-            lbl_cell2 = Label(window, text="0b010", bg = "#FFE373")
-            lbl_cell2.place(x=360, y=520)
-
-            lbl_cell3 = Label(window, text="0b011", bg = "#FFE373")
-            lbl_cell3.place(x=360, y=540)
-
-            lbl_cell4 = Label(window, text="0b100", bg = "#FFE373")
-            lbl_cell4.place(x=360, y=560)
-
-            lbl_cell5 = Label(window, text="0b101", bg = "#FFE373")
-            lbl_cell5.place(x=360, y=580)
-
-            lbl_cell6 = Label(window, text="0b110", bg = "#FFE373")
-            lbl_cell6.place(x=360, y=600)
-
-            lbl_cell7 = Label(window, text="0b111", bg = "#FFE373")
-            lbl_cell7.place(x=360, y=620)
-
-
-            #Memmory Blocks
-            lbl_allocate0 = Label(window,  bg = "#FFE373",  textvariable=self.CELL0)
-            lbl_allocate0.place(x=420, y=480)
-
-            lbl_allocate1 = Label(window,  bg = "#FFE373",  textvariable=self.CELL1)
-            lbl_allocate1.place(x=420, y=500)
-
-            lbl_allocate2 = Label(window,  bg = "#FFE373",  textvariable=self.CELL2)
-            lbl_allocate2.place(x=420, y=520)
-
-            lbl_allocate3 = Label(window, bg = "#FFE373",  textvariable=self.CELL3)
-            lbl_allocate3.place(x=420, y=540)
-
-            lbl_allocate4 = Label(window,  bg = "#FFE373",  textvariable=self.CELL4)
-            lbl_allocate4.place(x=420, y=560)
-
-            lbl_allocate5 = Label(window,  bg = "#FFE373",  textvariable=self.CELL5)
-            lbl_allocate5.place(x=420, y=580)
-
-            lbl_allocate6 = Label(window,  bg = "#FFE373",  textvariable=self.CELL6)
-            lbl_allocate6.place(x=420, y=600)
-
-            lbl_allocate7 = Label(window,  bg = "#FFE373", textvariable=self.CELL7)
-            lbl_allocate7.place(x=420, y=620)
-
-    #Set all processor to the threading 
-    def Thread_Processors(self):
-
-      bus_ = self.bus
-      p0 = Processor(0, bus_)
-      p1 = Processor(1, bus_)
-      p2 = Processor(2, bus_)
-      p3 = Processor(3, bus_)
-      self.processors = [p0,p1,p2,p3]
-      self.bus.processors = self.processors
-
-      UIThread = threading.Thread(target=self.updateUI, daemon=True)
-      UIThread.start()
-
-
-    def updateUI(self ):
+        #MAIN WINDOW CONFIGURATION 
+        tkinter.Tk.__init__(root)
+        root.title("MESI PROTOCOL SIMULATOR")
+        root.geometry("1300x700")
+        root.resizable(True,True)
+        root.configure(bg = "#FCEE91")
         
-      while 1:
-        #self.P0AInst.set(self.processors[0].instRunning)
-        #self.P0LInst.set(self.processors[0].lastInst)
+        #WINDOW ELEMENTS 
         
-        self.P0_BLOCK1_S.set(self.processors[0].control.cache.getBlock(0).bitState)
-        self.P0_BLOCK2_S.set(self.processors[0].control.cache.getBlock(1).bitState)
-        self.P0_BLOCK3_S.set(self.processors[0].control.cache.getBlock(2).bitState)
-        self.P0_BLOCK4_S.set(self.processors[0].control.cache.getBlock(3).bitState)
+        # Create an instance of Style widget
+        style = ttk.Style()
+        style.theme_use("clam")
+        ttk.Style().configure("Treeview.Heading",background = "#bce784",foreground="Black")
+
+        # cpu tittle frame
+        CpuLayout = Frame(root)
+        CpuLayout.place(anchor = "center", relx = 0.5, rely = 0.17)
+        ColumnName = ("Tittle")
+
+
+        """
+        ---------------------------------------------- CONTAINER FIRST PROCESSOR ----------------------------------------
         
-        self.P0_BLOCK1_V.set(hex(self.processors[0].control.cache.getBlock(0).data)[2:])
-        self.P0_BLOCK2_V.set(hex(self.processors[0].control.cache.getBlock(1).getData())[2:])
-        self.P0_BLOCK3_V.set(hex(self.processors[0].control.cache.getBlock(2).getData())[2:])
-        self.P0_BLOCK4_V.set(hex(self.processors[0].control.cache.getBlock(3).getData())[2:])
+        """
+        # treeview processor_0 title
+        CpuLayout.processor_0Title = ttk.Treeview(CpuLayout, columns = ColumnName, show = "headings", height = 0, selectmode = "none")
+
+        CpuLayout.processor_0Title.column("#0", width = 0, stretch = NO)
+        CpuLayout.processor_0Title.column("Tittle", anchor = CENTER, width = 310, stretch = NO)
+
+        CpuLayout.processor_0Title.heading("#0", text = "", anchor = CENTER)
+        CpuLayout.processor_0Title.heading("Tittle", text = "Processor 0", anchor = CENTER)
+
+        CpuLayout.processor_0Title.pack(padx = 10, pady = 0, side = LEFT)
+
+        controller0 = root.processor_0.getController()   #Initialize controller processor 0
+        cache0 = controller0.getCache()           #Set cachce processor 0
+        blocks0 = cache0.getBlocks()              #Set block information for each isntance 
+
+        values0 = []
         
-        self.P0_BLOCK1_A.set(bin(self.processors[0].control.cache.getBlock(0).memoryAddress)[2:])
-        self.P0_BLOCK2_A.set(bin(self.processors[0].control.cache.getBlock(1).memoryAddress)[2:])
-        self.P0_BLOCK3_A.set(bin(self.processors[0].control.cache.getBlock(2).memoryAddress)[2:])
-        self.P0_BLOCK4_A.set(bin(self.processors[0].control.cache.getBlock(3).memoryAddress)[2:])
+        #Create the first instances for the blocks and its values 
+        for block in blocks0:
+            number = "B" + str(block.getNumber())
+            state = block.getState()
+            memoryDirection = "0b" + "{0:04b}".format(block.getMemoryDirection())
+            value = "0x" + "{0:016x}".format(block.getValue())
+
+            item = (number, state, memoryDirection, value)
+
+            values0.append(item)
+
+        #CPU FRAME 
+        root.layout = Frame(root)
+        root.layout.place(anchor = "center", relx = 0.5, rely = 0.27)
+        cpuColumns = ("Block", "State", "Direction", "Value")   #CPU values according to it columns 
+
+
+        root.layout.Container0 = ttk.Treeview(root.layout, columns = cpuColumns, show = "headings", height = 4, selectmode = "none")
+
+        #Coloumns Set Configuration
+        root.layout.Container0.column("#0", width = 0, stretch = NO)
+        root.layout.Container0.column("Block", anchor = CENTER, width = 50, stretch = NO)
+        root.layout.Container0.column("State", anchor = CENTER, width = 50, stretch = NO)
+        root.layout.Container0.column("Direction", anchor = CENTER, width = 80, stretch = NO)
+        root.layout.Container0.column("Value", anchor = CENTER, width = 130, stretch = NO)
+
+        root.layout.Container0.heading("#0", text = "", anchor = CENTER)
+        root.layout.Container0.heading("Block", text = "Block", anchor = CENTER)
+        root.layout.Container0.heading("State", text = "State", anchor = CENTER)
+        root.layout.Container0.heading("Direction", text = "Direction", anchor = CENTER)
+        root.layout.Container0.heading("Value", text = "Value", anchor = CENTER)
+
+        root.layout.Container0.insert(parent = "", index = "end", iid = 0, text = "", values = values0[0], tags = ['t1'])
+        root.layout.Container0.insert(parent = "", index = "end", iid = 1, text = "", values = values0[1], tags = ['t2'])
+        root.layout.Container0.insert(parent = "", index = "end", iid = 2, text = "", values = values0[2], tags = ['t3'])
+        root.layout.Container0.insert(parent = "", index = "end", iid = 3, text = "", values = values0[3], tags = ['t4'])
+
+        root.layout.Container0.tag_configure('t1', background = "#CE4912")
+        root.layout.Container0.tag_configure('t2', background = "#CE4912")
+        root.layout.Container0.tag_configure('t3', background = "#CE4912")
+        root.layout.Container0.tag_configure('t4', background = "#CE4912")
+
+        root.layout.Container0.pack(padx = 10, pady = 0, side = LEFT)
+
+
+        """
+        -------------------------------------END FIRST CONTAINER PROCESSOR 0---------------------------------------------
+        """
+
+
+
+
+
+        """"
+        --------------------------------------- CONTAINER SECOND PROCESSOR ---------------------------------------------
+        """
+
+        # treeview processor_1 title
+        CpuLayout.processor_1Title = ttk.Treeview(CpuLayout, columns = ColumnName, show = "headings", height = 0, selectmode = "none")
+
+        CpuLayout.processor_1Title.column("#0", width = 0, stretch = NO)
+        CpuLayout.processor_1Title.column("Tittle", anchor = CENTER, width = 310, stretch = NO)
+
+        CpuLayout.processor_1Title.heading("#0", text = "", anchor = CENTER)
+        CpuLayout.processor_1Title.heading("Tittle", text = "Processor 1", anchor = CENTER)
+
+        CpuLayout.processor_1Title.pack(padx = 10, pady = 0, side = LEFT)
+
+        #CONTAINER PROCESSOR 1
+        controller1 = root.processor_1.getController()
+        cache1 = controller1.getCache()
+        blocks1 = cache1.getBlocks()
+
+        values1 = []
+
+        for block in blocks1:
+            number = "B" + str(block.getNumber())
+            state = block.getState()
+            memoryDirection = "0b" + "{0:04b}".format(block.getMemoryDirection())
+            value = "0x" + "{0:016x}".format(block.getValue())
+
+            item = (number, state, memoryDirection, value)
+
+            values1.append(item)
+
+        # treeview processor_1
+        root.layout.Container1 = ttk.Treeview(root.layout, columns = cpuColumns, show = "headings", height = 4, selectmode = "none")
+
+        #Coloumns Set Configuration
+        root.layout.Container1.column("#0", width = 0, stretch = NO)
+        root.layout.Container1.column("Block", anchor = CENTER, width = 50, stretch = NO)
+        root.layout.Container1.column("State", anchor = CENTER, width = 50, stretch = NO)
+        root.layout.Container1.column("Direction", anchor = CENTER, width = 80, stretch = NO)
+        root.layout.Container1.column("Value", anchor = CENTER, width = 130, stretch = NO)
+
+        root.layout.Container1.heading("#0", text = "", anchor = CENTER)
+        root.layout.Container1.heading("Block", text = "Block", anchor = CENTER)
+        root.layout.Container1.heading("State", text = "State", anchor = CENTER)
+        root.layout.Container1.heading("Direction", text = "Direction", anchor = CENTER)
+        root.layout.Container1.heading("Value", text = "Value", anchor = CENTER)
+
+        root.layout.Container1.insert(parent = "", index = "end", iid = 0, text = "", values = values1[0],tags=['b1'])
+        root.layout.Container1.insert(parent = "", index = "end", iid = 1, text = "", values = values1[1],tags=['b2'])
+        root.layout.Container1.insert(parent = "", index = "end", iid = 2, text = "", values = values1[2],tags=['b3'])
+        root.layout.Container1.insert(parent = "", index = "end", iid = 3, text = "", values = values1[3],tags=['b4'])
+
+        root.layout.Container1.tag_configure('b1', background = "#F36B1C")
+        root.layout.Container1.tag_configure('b2', background = "#F36B1C")
+        root.layout.Container1.tag_configure('b3', background = "#F36B1C")
+        root.layout.Container1.tag_configure('b4', background = "#F36B1C")
+
+        root.layout.Container1.pack(padx = 10, pady = 0, side = LEFT)
+
+        """
+        -------------------------------------END SECOND CONTAINER PROCESSOR 1---------------------------------------------
+        """
+
+
+
+
+        """"
+        --------------------------------------- CONTAINER THIRD PROCESSOR ---------------------------------------------
+        """
+
+
+        # treeview processor_2 title
+        CpuLayout.processor_2Title = ttk.Treeview(CpuLayout, columns = ColumnName, show = "headings", height = 0, selectmode = "none")
+
+        CpuLayout.processor_2Title.column("#0", width = 0, stretch = NO)
+        CpuLayout.processor_2Title.column("Tittle", anchor = CENTER, width = 310, stretch = NO)
+
+        CpuLayout.processor_2Title.heading("#0", text = "", anchor = CENTER)
+        CpuLayout.processor_2Title.heading("Tittle", text = "Processor 2", anchor = CENTER)
+
+        CpuLayout.processor_2Title.pack(padx = 10, pady = 0, side = LEFT)
+
+        controller2 = root.processor_2.getController()
+        cache2 = controller2.getCache()
+        blocks2 = cache2.getBlocks()
+
+        values2 = []
+
+        for block in blocks2:
+            number = "B" + str(block.getNumber())
+            state = block.getState()
+            memoryDirection = "0b" + "{0:04b}".format(block.getMemoryDirection())
+            value = "0x" + "{0:016x}".format(block.getValue())
+
+            item = (number, state, memoryDirection, value)
+
+            values2.append(item)
+
+        # treeview processor_2
+        root.layout.Container2 = ttk.Treeview(root.layout, columns = cpuColumns, show = "headings", height = 4, selectmode = "none")
+
+        #Coloumns Set Configuration
+        root.layout.Container2.column("#0", width = 0, stretch = NO)
+        root.layout.Container2.column("Block", anchor = CENTER, width = 50, stretch = NO)
+        root.layout.Container2.column("State", anchor = CENTER, width = 50, stretch = NO)
+        root.layout.Container2.column("Direction", anchor = CENTER, width = 80, stretch = NO)
+        root.layout.Container2.column("Value", anchor = CENTER, width = 130, stretch = NO)
+
+        root.layout.Container2.heading("#0", text = "", anchor = CENTER)
+        root.layout.Container2.heading("Block", text = "Block", anchor = CENTER)
+        root.layout.Container2.heading("State", text = "State", anchor = CENTER)
+        root.layout.Container2.heading("Direction", text = "Direction", anchor = CENTER)
+        root.layout.Container2.heading("Value", text = "Value", anchor = CENTER)
+
+        root.layout.Container2.insert(parent = "", index = "end", iid = 0, text = "", values = values2[0], tags = ['a1'])
+        root.layout.Container2.insert(parent = "", index = "end", iid = 1, text = "", values = values2[1], tags = ['a2'])
+        root.layout.Container2.insert(parent = "", index = "end", iid = 2, text = "", values = values2[2], tags = ['a3'])
+        root.layout.Container2.insert(parent = "", index = "end", iid = 3, text = "", values = values2[3], tags = ['a4'])
+
+        root.layout.Container2.tag_configure('a1', background = "#0B6AB0")
+        root.layout.Container2.tag_configure('a2', background = "#0B6AB0")
+        root.layout.Container2.tag_configure('a3', background = "#0B6AB0")
+        root.layout.Container2.tag_configure('a4', background = "#0B6AB0")
+
+        root.layout.Container2.pack(padx = 10, pady = 0, side = LEFT)
+
+        """
+        -------------------------------------END THIRD CONTAINER PROCESSOR 2---------------------------------------------
+        """
+
+
+
+        """"
+        --------------------------------------- CONTAINER FOURTH PROCESSOR ---------------------------------------------
+        """
+
+        # treeview processor_3 title
+        CpuLayout.processor_3Title = ttk.Treeview(CpuLayout, columns = ColumnName, show = "headings", height = 0, selectmode = "none")
+
+        CpuLayout.processor_3Title.column("#0", width = 0, stretch = NO)
+        CpuLayout.processor_3Title.column("Tittle", anchor = CENTER, width = 310, stretch = NO)
+
+        CpuLayout.processor_3Title.heading("#0", text = "", anchor = CENTER)
+        CpuLayout.processor_3Title.heading("Tittle", text = "Processor 3", anchor = CENTER)
+
+        CpuLayout.processor_3Title.pack(padx = 10, pady = 0, side = LEFT)
+
+       
+        controller3 = root.processor_3.getController()
+        cache3 = controller3.getCache()
+        blocks3 = cache3.getBlocks()
+
+        values3 = []
+
+        for block in blocks3:
+            number = "B" + str(block.getNumber())
+            state = block.getState()
+            memoryDirection = "0b" + "{0:04b}".format(block.getMemoryDirection())
+            value = "0x" + "{0:016x}".format(block.getValue())
+
+            item = (number, state, memoryDirection, value)
+
+            values3.append(item)
+
+        # treeview processor_3
+        root.layout.Container3 = ttk.Treeview(root.layout, columns = cpuColumns, show = "headings", height = 4, selectmode = "none")
+
+        #Coloumns Set Configuration
+        root.layout.Container3.column("#0", width = 0, stretch = NO)
+        root.layout.Container3.column("Block", anchor = CENTER, width = 50, stretch = NO)
+        root.layout.Container3.column("State", anchor = CENTER, width = 50, stretch = NO)
+        root.layout.Container3.column("Direction", anchor = CENTER, width = 80, stretch = NO)
+        root.layout.Container3.column("Value", anchor = CENTER, width = 130, stretch = NO)
+
+        root.layout.Container3.heading("#0", text = "", anchor = CENTER)
+        root.layout.Container3.heading("Block", text = "Block", anchor = CENTER)
+        root.layout.Container3.heading("State", text = "State", anchor = CENTER)
+        root.layout.Container3.heading("Direction", text = "Direction", anchor = CENTER)
+        root.layout.Container3.heading("Value", text = "Value", anchor = CENTER)
+
+        root.layout.Container3.insert(parent = "", index = "end", iid = 0, text = "", values = values3[0], tags=['d1'])
+        root.layout.Container3.insert(parent = "", index = "end", iid = 1, text = "", values = values3[1], tags=['d2'])
+        root.layout.Container3.insert(parent = "", index = "end", iid = 2, text = "", values = values3[2], tags=['d3'])
+        root.layout.Container3.insert(parent = "", index = "end", iid = 3, text = "", values = values3[3], tags=['d4'])
+
+        root.layout.Container3.tag_configure('d1', background = "#F8D605")
+        root.layout.Container3.tag_configure('d2', background = "#F8D605")
+        root.layout.Container3.tag_configure('d3', background = "#F8D605")
+        root.layout.Container3.tag_configure('d4', background = "#F8D605")
+
+        root.layout.Container3.pack(padx = 10, pady = 0, side = LEFT)
+
+        """
+        -------------------------------------END FOURTH CONTAINER PROCESSOR ---------------------------------------------
+        """
+
+
+        """
+        -------------------------------------------BUS SECTION-------------------------------------------------
+        """
+        # bus frame
+        bus_label = Label(bg = "red", width= 1312, height= 2)
+        bus_label.place(x=0, y = 270)
+
+        """
+        -------------------------------------------END BUS SECTION--------------------------------------------
+        """
+
+        """
+        -------------------------------------------MAIN MEMORY SECTION-------------------------------------------------
+        """ 
+
+        # main memory frame
+        root.Memlayout = Frame(root)
+        root.Memlayout.place(anchor = "center", relx = 0.5, rely = 0.65)
+
+        mainMemoryColumns = ("Direction", "Value")
+
+        dictionary = root.mainMemory.getDictionary()
+
+        keys = dictionary.keys()
+
+        keyArray = []
+
+        for key in keys:
+
+            keyArray.append(key)
+
+        # treeview main memory
+        root.Memlayout.MMContainer = ttk.Treeview(root.Memlayout, columns = mainMemoryColumns, show = "headings", height = 8, selectmode = "none")
+
+        root.Memlayout.MMContainer.column("#0", width = 0, stretch = NO)
+        root.Memlayout.MMContainer.column("Direction", anchor = CENTER, width = 80, stretch = NO)
+        root.Memlayout.MMContainer.column("Value", anchor = CENTER, width = 130, stretch = NO)
+
+        root.Memlayout.MMContainer.heading("#0", text = "", anchor = CENTER)
+        root.Memlayout.MMContainer.heading("Direction", text = "Direction", anchor = CENTER)
+        root.Memlayout.MMContainer.heading("Value", text = "Value", anchor = CENTER)
+
+        root.Memlayout.MMContainer.insert(parent = "", index = "end", iid = 0, text = "", values = ("0b" + "{0:04b}".format(keyArray[0]), "0x" + "{0:016x}".format(dictionary[keyArray[0]])), tags=['b1'])
+        root.Memlayout.MMContainer.insert(parent = "", index = "end", iid = 1, text = "", values = ("0b" + "{0:04b}".format(keyArray[1]), "0x" + "{0:016x}".format(dictionary[keyArray[1]])), tags=['b2'])
+        root.Memlayout.MMContainer.insert(parent = "", index = "end", iid = 2, text = "", values = ("0b" + "{0:04b}".format(keyArray[2]), "0x" + "{0:016x}".format(dictionary[keyArray[2]])), tags=['b3'])
+        root.Memlayout.MMContainer.insert(parent = "", index = "end", iid = 3, text = "", values = ("0b" + "{0:04b}".format(keyArray[3]), "0x" + "{0:016x}".format(dictionary[keyArray[3]])), tags=['b4'])
+        root.Memlayout.MMContainer.insert(parent = "", index = "end", iid = 4, text = "", values = ("0b" + "{0:04b}".format(keyArray[4]), "0x" + "{0:016x}".format(dictionary[keyArray[4]])), tags=['b5'])
+        root.Memlayout.MMContainer.insert(parent = "", index = "end", iid = 5, text = "", values = ("0b" + "{0:04b}".format(keyArray[5]), "0x" + "{0:016x}".format(dictionary[keyArray[5]])), tags=['b6'])
+        root.Memlayout.MMContainer.insert(parent = "", index = "end", iid = 6, text = "", values = ("0b" + "{0:04b}".format(keyArray[6]), "0x" + "{0:016x}".format(dictionary[keyArray[6]])), tags=['b7'])
+        root.Memlayout.MMContainer.insert(parent = "", index = "end", iid = 7, text = "", values = ("0b" + "{0:04b}".format(keyArray[7]), "0x" + "{0:016x}".format(dictionary[keyArray[7]])), tags=['b8'])
+
+        #Color memory blocks
+        root.Memlayout.MMContainer.tag_configure('b1', background = "#D2B4DE")
+        root.Memlayout.MMContainer.tag_configure('b2', background = "#FFB5FB")
+        root.Memlayout.MMContainer.tag_configure('b3', background = "#F1C40F")
+        root.Memlayout.MMContainer.tag_configure('b4', background = "#82E0AA")
+        root.Memlayout.MMContainer.tag_configure('b5', background = "#3498DB")
+        root.Memlayout.MMContainer.tag_configure('b6', background = "#EC7063")
+        root.Memlayout.MMContainer.tag_configure('b7', background = "#8DFF33")
+        root.Memlayout.MMContainer.tag_configure('b8', background = "#F9E79F")
         
-        #self.P1AInst.set(self.processors[1].instRunning)
-        #self.P1LInst.set(self.processors[1].lastInst)
-        self.P1_BLOCK1_S.set(self.processors[1].control.cache.getBlock(0).bitState)
-        self.P1_BLOCK2_S.set(self.processors[1].control.cache.getBlock(1).bitState)
-        self.P1_BLOCK3_S.set(self.processors[1].control.cache.getBlock(2).bitState)
-        self.P1_BLOCK4_S.set(self.processors[1].control.cache.getBlock(3).bitState)
+        root.Memlayout.MMContainer.pack(side = BOTTOM)
 
-        self.P1_BLOCK1_V.set(hex(self.processors[1].control.cache.getBlock(0).data)[2:])
-        self.P1_BLOCK2_V.set(hex(self.processors[1].control.cache.getBlock(1).getData())[2:])
-        self.P1_BLOCK3_V.set(hex(self.processors[1].control.cache.getBlock(2).getData())[2:])
-        self.P1_BLOCK4_V.set(hex(self.processors[1].control.cache.getBlock(3).getData())[2:])
 
-        self.P1_BLOCK1_A.set(bin(self.processors[1].control.cache.getBlock(0).memoryAddress)[2:])
-        self.P1_BLOCK2_A.set(bin(self.processors[1].control.cache.getBlock(1).memoryAddress)[2:])
-        self.P1_BLOCK3_A.set(bin(self.processors[1].control.cache.getBlock(2).memoryAddress)[2:])
-        self.P1_BLOCK4_A.set(bin(self.processors[1].control.cache.getBlock(3).memoryAddress)[2:])
+        #---------------------------------------LAST INSTRUCCON-----------------------------------------------------
+        # last instruction tittle frame
+        lastInstructionTittleFrame = Frame(root)
+        lastInstructionTittleFrame.place(anchor = "center", relx = 0.168, rely = 0.535)
+
+        # last instruction tittle column
+        lastInstructionTittleColumn = ("Tittle")
+
+        # treeview last instruction
+        lastInstructionTittleFrame.lastInstructionTittle = ttk.Treeview(lastInstructionTittleFrame, columns = lastInstructionTittleColumn, show = "headings", height = 0, selectmode = "none")
+
+        lastInstructionTittleFrame.lastInstructionTittle.column("#0", width = 0, stretch = NO)
+        lastInstructionTittleFrame.lastInstructionTittle.column("Tittle", anchor = CENTER, width = 420, stretch = NO)
         
-        #self.P2AInst.set(self.processors[2].instRunning)
-        #self.P2LInst.set(self.processors[2].lastInst)
-        self.P2_BLOCK1_S.set(self.processors[2].control.cache.getBlock(0).bitState)
-        self.P2_BLOCK2_S.set(self.processors[2].control.cache.getBlock(1).bitState)
-        self.P2_BLOCK3_S.set(self.processors[2].control.cache.getBlock(2).bitState)
-        self.P2_BLOCK4_S.set(self.processors[2].control.cache.getBlock(3).bitState)
+        lastInstructionTittleFrame.lastInstructionTittle.heading("#0", text = "", anchor = CENTER)
+        lastInstructionTittleFrame.lastInstructionTittle.heading("Tittle", text = "Last instruction Executed", anchor = CENTER)
 
-        self.P2_BLOCK1_V.set(hex(self.processors[2].control.cache.getBlock(0).data)[2:])
-        self.P2_BLOCK2_V.set(hex(self.processors[2].control.cache.getBlock(1).getData())[2:])
-        self.P2_BLOCK3_V.set(hex(self.processors[2].control.cache.getBlock(2).getData())[2:])
-        self.P2_BLOCK4_V.set(hex(self.processors[2].control.cache.getBlock(3).getData())[2:])
+        lastInstructionTittleFrame.lastInstructionTittle.pack(padx = 10, pady = 0, side = LEFT)
 
-        self.P2_BLOCK1_A.set(bin(self.processors[2].control.cache.getBlock(0).memoryAddress)[2:])
-        self.P2_BLOCK2_A.set(bin(self.processors[2].control.cache.getBlock(1).memoryAddress)[2:])
-        self.P2_BLOCK3_A.set(bin(self.processors[2].control.cache.getBlock(2).memoryAddress)[2:])
-        self.P2_BLOCK4_A.set(bin(self.processors[2].control.cache.getBlock(3).memoryAddress)[2:])
+        # last instruction frame
+        root.li_layout = Frame(root)
+        root.li_layout.place(anchor = "center", relx = 0.168, rely = 0.636)
+
+        instructionColumns = ("CPU", "Instruction", "Read Miss", "Write Miss")
+
+        # treeview instruction
+        root.li_layout.InstructionContainer = ttk.Treeview(root.li_layout, columns = instructionColumns, show = "headings", height = 4, selectmode = "none")
+
+        root.li_layout.InstructionContainer.column("#0", width = 0, stretch = NO)
+        root.li_layout.InstructionContainer.column("CPU", anchor = CENTER, width = 40, stretch = NO)
+        root.li_layout.InstructionContainer.column("Instruction", anchor = CENTER, width = 220, stretch = NO)
+        root.li_layout.InstructionContainer.column("Read Miss", anchor = CENTER, width = 80, stretch = NO)
+        root.li_layout.InstructionContainer.column("Write Miss", anchor = CENTER, width = 80, stretch = NO)
+
+        root.li_layout.InstructionContainer.heading("#0", text = "", anchor = CENTER)
+        root.li_layout.InstructionContainer.heading("CPU", text = "CPU", anchor = CENTER)
+        root.li_layout.InstructionContainer.heading("Instruction", text = "Instruction", anchor = CENTER)
+        root.li_layout.InstructionContainer.heading("Read Miss", text = "Read Miss", anchor = CENTER)
+        root.li_layout.InstructionContainer.heading("Write Miss", text = "Write Miss", anchor = CENTER)
+
+        root.li_layout.InstructionContainer.insert(parent = "", index = "end", iid = 0, text = "", values = ("N0", None, "0", "0"),tags = ['j1'])
+        root.li_layout.InstructionContainer.insert(parent = "", index = "end", iid = 1, text = "", values = ("N1", None, "0", "0"),tags = ['j2'])
+        root.li_layout.InstructionContainer.insert(parent = "", index = "end", iid = 2, text = "", values = ("N2", None, "0", "0"),tags = ['j3'])
+        root.li_layout.InstructionContainer.insert(parent = "", index = "end", iid = 3, text = "", values = ("N3", None, "0", "0"),tags = ['j4'])
+
+        root.li_layout.InstructionContainer.tag_configure('j1', background = "#D71E3A")
+        root.li_layout.InstructionContainer.tag_configure('j2', background = "#D71E3A")
+        root.li_layout.InstructionContainer.tag_configure('j3', background = "#D71E3A")
+        root.li_layout.InstructionContainer.tag_configure('j4', background = "#D71E3A")
+
+
+        root.li_layout.InstructionContainer.pack(side = LEFT)
+
+        # current instruction tittle frame
+        currentInstructionTittleFrame = Frame(root)
+        currentInstructionTittleFrame.place(anchor = "center", relx = 0.168, rely = 0.77)
+
+        # last instruction tittle column
+        currentInstructionTittleColumn = ("Tittle")
+
+        # treeview last instruction
+        currentInstructionTittleFrame.currentInstructionTittle = ttk.Treeview(currentInstructionTittleFrame, columns = currentInstructionTittleColumn, show = "headings", height = 0, selectmode = "none")
+
+        currentInstructionTittleFrame.currentInstructionTittle.column("#0", width = 0, stretch = NO)
+        currentInstructionTittleFrame.currentInstructionTittle.column("Tittle", anchor = CENTER, width = 420, stretch = NO)
         
-        #self.P3AInst.set(self.processors[3].instRunning)
-        #self.P3LInst.set(self.processors[3].lastInst)
-        self.P3_BLOCK1_S.set(self.processors[3].control.cache.getBlock(0).bitState)
-        self.P3_BLOCK2_S.set(self.processors[3].control.cache.getBlock(1).bitState)
-        self.P3_BLOCK3_S.set(self.processors[3].control.cache.getBlock(2).bitState)
-        self.P3_BLOCK4_S.set(self.processors[3].control.cache.getBlock(3).bitState)
+        currentInstructionTittleFrame.currentInstructionTittle.heading("#0", text = "", anchor = CENTER)
+        currentInstructionTittleFrame.currentInstructionTittle.heading("Tittle", text = "Current Intruction Executing", anchor = CENTER)
 
-        self.P3_BLOCK1_V.set(hex(self.processors[3].control.cache.getBlock(0).data)[2:])
-        self.P3_BLOCK2_V.set(hex(self.processors[3].control.cache.getBlock(1).getData())[2:])
-        self.P3_BLOCK3_V.set(hex(self.processors[3].control.cache.getBlock(2).getData())[2:])
-        self.P3_BLOCK4_V.set(hex(self.processors[3].control.cache.getBlock(3).getData())[2:])
+        currentInstructionTittleFrame.currentInstructionTittle.pack(padx = 10, pady = 0, side = LEFT)
+
+        # current instruction frame
+        root.ci_layout = Frame(root)
+        root.ci_layout.place(anchor = "center", relx = 0.168, rely = 0.87)
+
+        # treeview instruction
+        root.ci_layout.InstructionContainer = ttk.Treeview(root.ci_layout, columns = instructionColumns, show = "headings", height = 4, selectmode = "none")
+
+        root.ci_layout.InstructionContainer.column("#0", width = 0, stretch = NO)
+        root.ci_layout.InstructionContainer.column("CPU", anchor = CENTER, width = 40, stretch = NO)
+        root.ci_layout.InstructionContainer.column("Instruction", anchor = CENTER, width = 220, stretch = NO)
+        root.ci_layout.InstructionContainer.column("Read Miss", anchor = CENTER, width = 80, stretch = NO)
+        root.ci_layout.InstructionContainer.column("Write Miss", anchor = CENTER, width = 80, stretch = NO)
+
+        root.ci_layout.InstructionContainer.heading("#0", text = "", anchor = CENTER)
+        root.ci_layout.InstructionContainer.heading("CPU", text = "CPU", anchor = CENTER)
+        root.ci_layout.InstructionContainer.heading("Instruction", text = "Instruction", anchor = CENTER)
+        root.ci_layout.InstructionContainer.heading("Read Miss", text = "Read Miss", anchor = CENTER)
+        root.ci_layout.InstructionContainer.heading("Write Miss", text = "Write Miss", anchor = CENTER)
+
+        root.ci_layout.InstructionContainer.insert(parent = "", index = "end", iid = 0, text = "", values = ("N0", None, "0", "0"), tags=['g1'])
+        root.ci_layout.InstructionContainer.insert(parent = "", index = "end", iid = 1, text = "", values = ("N1", None, "0", "0"), tags=['g2'])
+        root.ci_layout.InstructionContainer.insert(parent = "", index = "end", iid = 2, text = "", values = ("N2", None, "0", "0"), tags=['g3'])
+        root.ci_layout.InstructionContainer.insert(parent = "", index = "end", iid = 3, text = "", values = ("N3", None, "0", "0"), tags=['g4'])
+
+        root.ci_layout.InstructionContainer.tag_configure('g1', background = "#8C4966")
+        root.ci_layout.InstructionContainer.tag_configure('g2', background = "#8C4966")
+        root.ci_layout.InstructionContainer.tag_configure('g3', background = "#8C4966")
+        root.ci_layout.InstructionContainer.tag_configure('g4', background = "#8C4966")
+
+        root.ci_layout.InstructionContainer.pack(side = LEFT)
+
+        buttonFrame = Frame(root)
+        buttonFrame.place(anchor = "center", relx = 0.7985, rely = 0.539)
+
+        # step by step button
+        buttonFrame.stepByStepButton = Button(buttonFrame, text = "Step by Step", activebackground = "#FF8000", fg = "white", bg = "#1E1ED7", font = ("Italic", 13), width = 10, heigh = 1, command = root.stepByStep)
+        buttonFrame.stepByStepButton.pack(padx = 10, pady = 0, side = LEFT)
+
+        # continuos execution button
+        buttonFrame.continuosExecutionButton = Button(buttonFrame, text = "START", activebackground = "#FF8000", fg = "white", bg = "#1E1ED7", font = ("Italic", 13), width = 20, heigh = 1, command = root.continuosExecution)
+        buttonFrame.continuosExecutionButton.pack(padx = 10, pady = 0, side = LEFT)
+
+        # stop button
+        buttonFrame.stopButton = Button(buttonFrame, text = "STOP", activebackground = "#FF8000", fg = "white", bg = "#1E1ED7", font = ("Italic", 13), width = 10, heigh = 1, command = root.stop)
+        buttonFrame.stopButton.pack(padx = 10, pady = 0, side = LEFT)
+
+        # insert instruction tittle frame
+        inst_layout = Frame(root)
+        inst_layout.place(anchor = "center", relx = 0.795, rely = 0.625)
+
+        # CPU label
+        inst_layout.cpuLabel = Label(inst_layout, text = "Processor", fg =  "#1E1ED7", font = ("Italic", 14), bg = "#FCEE91")
+        inst_layout.cpuLabel.pack(padx = 10, pady = 0, side = LEFT)
         
-        self.P3_BLOCK1_A.set(bin(self.processors[3].control.cache.getBlock(0).memoryAddress)[2:])
-        self.P3_BLOCK2_A.set(bin(self.processors[3].control.cache.getBlock(1).memoryAddress)[2:])
-        self.P3_BLOCK3_A.set(bin(self.processors[3].control.cache.getBlock(2).memoryAddress)[2:])
-        self.P3_BLOCK4_A.set(bin(self.processors[3].control.cache.getBlock(3).memoryAddress)[2:])
-      
+        # operation label
+        inst_layout.operationLabel = Label(inst_layout, text = " Operation", fg =  "#1E1ED7", font = ("Italic", 14), bg = "#FCEE91")
+        inst_layout.operationLabel.pack(padx = 10, pady = 0, side = LEFT)
 
-        self.CELL0.set(hex(self.memory.read(0))[2:])
-        self.CELL1.set(hex(self.memory.read(1))[2:])
-        self.CELL2.set(hex(self.memory.read(2))[2:])
-        self.CELL3.set(hex(self.memory.read(3))[2:])
-        self.CELL4.set(hex(self.memory.read(4))[2:])
-        self.CELL5.set(hex(self.memory.read(5))[2:])
-        self.CELL6.set(hex(self.memory.read(6))[2:])
-        self.CELL7.set(hex(self.memory.read(7))[2:])
- 
-        time.sleep(0.1)
+        # direction label
+        inst_layout.directionLabel = Label(inst_layout, text = "  Dir", fg =  "#1E1ED7", font = ("Italic", 14), bg = "#FCEE91")
+        inst_layout.directionLabel.pack(padx = 10, pady = 0, side = LEFT)
+
+        # value label
+        inst_layout.valueLabel = Label(inst_layout, text = "     Value", fg =  "#1E1ED7", font = ("Italic", 14), bg = "#FCEE91")
+        inst_layout.valueLabel.pack(padx = 10, pady = 0, side = LEFT)
+
+        # insert instruction frame
+        root.inst_instruction = Frame(root)
+        root.inst_instruction.place(anchor = "center", relx = 0.79999, rely = 0.685)
+
+        # CPU textBox
+        root.inst_instruction.CpuTextBox = Entry(root.inst_instruction, width = 10, font = ("Italic", 13))
+        root.inst_instruction.CpuTextBox.pack(padx = 10, pady = 0, side = LEFT)
+
+        # operation textBox
+        root.inst_instruction.operationTextBox = Entry(root.inst_instruction, width = 10, font = ("Italic", 13))
+        root.inst_instruction.operationTextBox.pack(padx = 10, pady = 0, side = LEFT)
+
+        # direction textBox
+        root.inst_instruction.directionTextBox = Entry(root.inst_instruction, width = 10, font = ("Italic", 13))
+        root.inst_instruction.directionTextBox.pack(padx = 10, pady = 0, side = LEFT)
+
+        # value textBox
+        root.inst_instruction.valueTextBox = Entry(root.inst_instruction, width = 10, font = ("Italic", 13))
+        root.inst_instruction.valueTextBox.pack(padx = 10, pady = 0, side = LEFT)
+
+        # load frame
+        loadFrame = Frame(root)
+        loadFrame.place(anchor = "center", relx = 0.7985, rely = 0.762)
+
+        # load button
+        loadFrame.loadButton = Button(loadFrame, text = "Add", activebackground = "#FF8000", fg = "white", bg = "#1E1ED7", font = ("Italic", 13), width = 20, heigh = 1, command = root.load)
+        loadFrame.loadButton.pack(padx = 0, pady = 0, side = LEFT)
 
 
-  
+#---------------------------------------------------------------------------------------------------------------------------
+#                                                           END GUI DESIGN
+#-------------------------------------------------------------------------------------------------------------------------
+
+
+    def ProcessoInformation(root):
+
+        processor_cnt = 0
+        block_pinter = 0
+
+        for cpu in root.Array_list:
+
+            controller = cpu.getController()
+            cache = controller.getCache()
+            blocks = cache.getBlocks()
+
+            for block in blocks:
+
+                number = "B" + str(block.getNumber())
+                state = block.getState()
+                memoryDirection = "0b" + "{0:04b}".format(block.getMemoryDirection())
+                value = "0x" + "{0:016x}".format(block.getValue())
+                blockValues = (number, state, memoryDirection, value)
+
+                # block0
+                if(block_pinter == 0):
+                    # processor_0
+                    if(processor_cnt == 0):
+                        root.layout.Container0.item(block_pinter, text = "", values = blockValues)
+                    # processor_1
+                    elif(processor_cnt == 1):
+                        root.layout.Container1.item(block_pinter, text = "", values = blockValues)
+                    # processor_2
+                    elif(processor_cnt == 2):
+                        root.layout.Container2.item(block_pinter, text = "", values = blockValues)
+                    # processor_3
+                    else:
+                        root.layout.Container3.item(block_pinter, text = "", values = blockValues)
+
+                # block1
+                elif(block_pinter == 1):
+                    # procesor_0
+                    if(processor_cnt == 0):
+                        root.layout.Container0.item(block_pinter, text = "", values = blockValues)
+                    # processor_1
+                    elif(processor_cnt == 1):
+                        root.layout.Container1.item(block_pinter, text = "", values = blockValues)
+                    # processor_2
+                    elif(processor_cnt == 2):
+                        root.layout.Container2.item(block_pinter, text = "", values = blockValues)
+                    # processor_3
+                    else:
+                        root.layout.Container3.item(block_pinter, text = "", values = blockValues)
+
+                # block2
+                elif(block_pinter == 3):
+                    # processor_0
+                    if(processor_cnt == 0):
+                        root.layout.Container0.item(block_pinter, text = "", values = blockValues)
+                    # processor_1
+                    elif(processor_cnt == 1):
+                        root.layout.Container1.item(block_pinter, text = "", values = blockValues)
+                    # processor_2
+                    elif(processor_cnt == 2):
+                        root.layout.Container2.item(block_pinter, text = "", values = blockValues)
+                    # processor_3
+                    else:
+                        root.layout.Container3.item(block_pinter, text = "", values = blockValues)
+
+                # block3
+                else:
+                    # processor_0
+                    if(processor_cnt == 0):
+                        root.layout.Container0.item(block_pinter, text = "", values = blockValues)
+                    # processor_1
+                    elif(processor_cnt == 1):
+                        root.layout.Container1.item(block_pinter, text = "", values = blockValues)
+                    # processor_2
+                    elif(processor_cnt == 2):
+                        root.layout.Container2.item(block_pinter, text = "", values = blockValues)
+                    # processor_3
+                    else:
+                        root.layout.Container3.item(block_pinter, text = "", values = blockValues)
+
+
+                block_pinter += 1
+            block_pinter = 0
+            processor_cnt += 1
+
+    def MainMemInformation(root):
+        
+        dictionary = root.mainMemory.getDictionary()
+        keys = dictionary.keys()
+        keyArray = []
+
+        for key in keys:
+            keyArray.append(key)
+        index = 0
+
+        for key in keyArray:
+            mainMemoryValues = ("0b" + "{0:04b}".format(key), "0x" + "{0:016x}".format(dictionary[key]))
+            root.Memlayout.MMContainer.item(index, text = "", values = mainMemoryValues)
+            index += 1
+
+    def LastInst(root):
+
+        for index in range(0, 4):
+            current = root.ci_layout.InstructionContainer.item(index)
+            currentValues = tuple(current["values"])
+            root.li_layout.InstructionContainer.item(index, text = "", values = currentValues)
+
+    def CurrentInst(root):
+
+        index = 0
+        for cpu in root.Array_list:
+            cpuNumber = "N" + str(cpu.getNumber())
+            instruction = cpu.getCurrentInstruction()
+
+            if(instruction is not None):
+                operation = instruction.getOperation()
+                # calc instruction
+                if(operation == OPERATIONS[0]):
+                    instruction = operation
+                # not calc instruction
+                else:
+                    memoryDirection = instruction.getMemoryDirection()
+                    # read instruction
+                    if(operation == OPERATIONS[1]):
+                        instruction = operation + "  0b" + "{0:04b}".format(memoryDirection)
+                    # write instruction
+                    else:
+                        value = instruction.getValue()
+                        instruction = operation + "  0b" + "{0:04b}".format(memoryDirection) + "; " + "0x" + "{0:016x}".format(value)
+
+                controller = cpu.getController()
+                readMiss = controller.getReadMiss()
+                writeMiss = controller.getWriteMiss()
+                instructionValues = (cpuNumber, instruction, readMiss, writeMiss)
+                root.ci_layout.InstructionContainer.item(index, text = "", values = instructionValues)
+                index += 1
+
+    def EnableThread(root, cpu):
+
+        if(cpu.getCurrentInstruction() is not None):
+            root.LastInst()
+
+        # not loaded instruction
+        if(cpu.getLoaded() == 0):
+            cpu.generateInstruction()          
+            sleep(TIMER)
+
+        # loaded instruction
+        else:
+            cpu.setLoaded(0)
+        cpu.executeInstruction(root.bus)        
+        root.CurrentInst()
+        sleep(TIMER)       
+        root.ProcessoInformation()
+        root.MainMemInformation()
+
+    def stepByStep(root):
+        
+        thread0 = Thread(target = root.EnableThread, args = (root.processor_0,))
+        thread1 = Thread(target = root.EnableThread, args = (root.processor_1,))
+        thread2 = Thread(target = root.EnableThread, args = (root.processor_2,))
+        thread3 = Thread(target = root.EnableThread, args = (root.processor_3,))
+
+        # start threads
+        thread0.start()
+        thread1.start()
+        thread2.start()
+        thread3.start()
+
+    def Start(root):
+
+        root.stopFlag = 0
+
+        while(root.stopFlag == 0):
+
+            # create threads
+            thread0 = Thread(target = root.EnableThread, args = (root.processor_0,))
+            thread1 = Thread(target = root.EnableThread, args = (root.processor_1,))
+            thread2 = Thread(target = root.EnableThread, args = (root.processor_2,))
+            thread3 = Thread(target = root.EnableThread, args = (root.processor_3,))
+
+            # start threads
+            thread0.start()
+            thread1.start()
+            thread2.start()
+            thread3.start()
+
+            sleep(TIMER * 2)
+
+        print("stopd")
+
+    def continuosExecution(root):
+
+        # create thread
+        Start = Thread(target = root.Start)
+        # start thread
+        Start.start()
+
+    def stop(root):
+        
+        root.stopFlag = 1
+
+    def load(root):
+
+        if(root.stopFlag == 1):
+        
+            # get gata
+            cpuNumber = root.inst_instruction.CpuTextBox.get()
+            operation = root.inst_instruction.operationTextBox.get()
+            memoryDirection = root.inst_instruction.directionTextBox.get()
+            value = root.inst_instruction.valueTextBox.get()
+
+            if(cpuNumber != "" and operation != ""):
+                cpuNumber = int(cpuNumber)
+                cpu = root.Array_list[cpuNumber]
+                cpu.setLoaded(1)
+                loadInstruction = Instruction(cpuNumber, operation)
+
+                if(memoryDirection != ""):
+                    memoryDirection = int(memoryDirection, 2)
+                    loadInstruction.setMemoryDirection(memoryDirection)
+
+                if(value != ""):
+                    value = int(value, 16)
+                    loadInstruction.setValue(value)
+
+                cpu.setCurrentInstruction(loadInstruction)
+
+                # clear textBoxes
+                root.inst_instruction.CpuTextBox.delete(0, END)
+                root.inst_instruction.operationTextBox.delete(0, END)
+                root.inst_instruction.directionTextBox.delete(0, END)
+                root.inst_instruction.valueTextBox.delete(0, END)
+
+# window loop
+GUI().mainloop()
