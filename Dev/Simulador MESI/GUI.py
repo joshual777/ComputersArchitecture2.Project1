@@ -319,9 +319,15 @@ class GUI(tkinter.Tk):
         """
         -------------------------------------------BUS SECTION-------------------------------------------------
         """
-        # bus frame
-        bus_label = Label(bg = "red", width= 1312, height= 2)
+        # bus 
+
+        bus_label_ = Label(bg = "red", width= 1312, height= 2, text="BUS", fg="black")
+        bus_label_.place(x=600, y = 270)
+
+        bus_label = Label(bg = "red", width= 1312, height= 2, text="BUS", fg="black")
         bus_label.place(x=0, y = 270)
+
+        
 
         """
         -------------------------------------------END BUS SECTION--------------------------------------------
